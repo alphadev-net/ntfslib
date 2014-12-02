@@ -13,3 +13,7 @@ hs_err_pid*
 
 # Cloud9
 .c9/
+
+### Gradle ###
+.gradle
+build/
