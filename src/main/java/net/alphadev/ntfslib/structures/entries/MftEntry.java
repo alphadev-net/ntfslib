@@ -39,6 +39,7 @@ public class MftEntry {
     }
 
     public ByteBuffer getAttribute(AttributeType attribute) {
+        
         return null;
     }
 }

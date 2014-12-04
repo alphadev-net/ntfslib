@@ -18,6 +18,7 @@ package net.alphadev.ntfslib.structures;
 import java.io.IOException;
 
 import net.alphadev.ntfslib.api.BlockDevice;
+import net.alphadev.ntfslib.structures.entries.KnownMftEntries;
 import net.alphadev.ntfslib.structures.entries.MftEntry;
 import net.alphadev.ntfslib.structures.entries.VolumeInfo;
 

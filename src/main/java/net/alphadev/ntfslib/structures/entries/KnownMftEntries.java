@@ -13,13 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.alphadev.ntfslib.structures;
+package net.alphadev.ntfslib.structures.entries;
 
 public enum KnownMftEntries {
     MFT_MAIN(0),
-    MFT_MIRROR(1),
-    LOG(2),
-    VOLUME_INFO(3);
+    MFT_MIRR(1),
+    LOG_FILE(2),
+    VOLUME(3),
+    ATTR_DEF(4),
+    ROOT(5),
+    BITMAP(6),
+    BOOT(7),
+    BAD_CLUS(8),
+    SECURE(9),
+    UPCASE(10),
+    EXTEND(11);
 
     private long value;
 
