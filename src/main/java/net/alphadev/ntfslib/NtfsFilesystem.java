@@ -30,11 +30,8 @@ import net.alphadev.ntfslib.structures.entries.VolumeInfo;
  * @author Jan Seeger
  */
 public class NtfsFilesystem implements Filesystem {
-    public static final String VOLUME_INFO = "$Volume";
-
     private BlockDevice mDevice;
     private MasterFileTable mft;
-    private VolumeInfo volumeInfo;
 
     public NtfsFilesystem(BlockDevice device) throws IOException {
         mDevice = device;
@@ -43,12 +40,10 @@ public class NtfsFilesystem implements Filesystem {
         ExtendedBpb pbp = boot.getBootPartitionParameter();
         mft = MasterFileTable.read(device, pbp.getMftLogicalCluster(),
                 pbp.getMftMirrorLogicalCluster());
-
-        volumeInfo = VolumeInfo.read(mft.getEntry(VOLUME_INFO));
     }
 
     @Override
     public String getVolumeName() {
-        return volumeInfo.getVolumeLabel();
+        return mft.getVolumeInfo().getVolumeLabel();
     }
 }

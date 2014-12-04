@@ -17,12 +17,16 @@ package net.alphadev.ntfslib.structures;
 
 import net.alphadev.ntfslib.api.BlockDevice;
 import net.alphadev.ntfslib.structures.entries.MftEntry;
+import net.alphadev.ntfslib.structures.entries.VolumeInfo;
 
 /**
  * @author Jan Seeger <jan@alphadev.net>
  */
 public class MasterFileTable {
+    public static final String VOLUME_INFO = "$Volume";
+
     private BlockDevice device;
+    private VolumeInfo volumeInfo;
 
     private MasterFileTable(BlockDevice device, long offset, boolean isMirror) {
         this.device = device;
@@ -39,5 +43,13 @@ public class MasterFileTable {
 
     public MftEntry getEntry(long entryNumber) {
         return null;
+    }
+
+    public VolumeInfo getVolumeInfo() {
+        if(volumeInfo == null) {
+            volumeInfo = VolumeInfo.read(getEntry(VOLUME_INFO));
+        }
+
+        return volumeInfo;
     }
 }
