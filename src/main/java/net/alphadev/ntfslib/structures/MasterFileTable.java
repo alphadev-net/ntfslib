@@ -27,14 +27,19 @@ public class MasterFileTable {
 
     private BlockDevice device;
     private VolumeInfo volumeInfo;
+    private long baseOffset;
 
-    private MasterFileTable(BlockDevice device, long offset, boolean isMirror) {
+    private MasterFileTable(BlockDevice device, long offset) {
         this.device = device;
+        this.baseOffset = offset;
     }
 
-    public static MasterFileTable read(BlockDevice device, long offsetMain, long offsetMirror) {
-        //MasterFileTable main = 
-        return null;
+    public static MasterFileTable read(BlockDevice device, ExtendedBpb partitionParameter) {
+        long mftMainStart = partitionParameter.getMftLogicalCluster();
+        long mftCopyStart = partitionParameter.getMftMirrorLogicalCluster();
+
+        MasterFileTable mainMft = new MasterFileTable(device, mftMainStart);
+        return mainMft;
     }
 
     public MftEntry getEntry(String entryName) {
