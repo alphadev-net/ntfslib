@@ -15,21 +15,115 @@
  */
 package net.alphadev.ntfslib.structures.attributes;
 
-
+import java.nio.ByteBuffer;
 
 public class StandardInformation extends Attribute {
-/*
- * 0x00	8	 	C Time - File Creation
- * 0x08	8	 	A Time - File Altered
- * 0x10	8	 	M Time - MFT Changed
- * 0x18	8	 	R Time - File Read
- * 0x20	4	 	DOS File Permissions
- * 0x24	4	 	Maximum Number of Versions
- * 0x28	4	 	Version Number
- * 0x2C	4	 	Class Id
- * 0x30	4	2K	Owner Id
- * 0x34	4	2K	Security Id
- * 0x38	8	2K	Quota Charged
- * 0x40	8	2K	Update Sequence Number (USN)
- */
+    public static final byte CREATION_TIME_OFFSET = 0x00;
+    public static final byte ALTERATION_TIME_OFFSET = 0x08;
+    public static final byte MFT_CHANGE_TIME_OFFSET = 0x10;
+    public static final byte READ_TIME_OFFSET = 0x18;
+    public static final byte DOS_FILE_PERMISSIONS_OFFSET = 0x20;
+    public static final byte MAX_VERSIONS_OFFSET = 0x24;
+    public static final byte VERSION_NUMBER_OFFSET = 0x28;
+    public static final byte CLASS_ID_OFFSET = 0x2c;
+    public static final byte OWNER_ID_OFFSET = 0x30;
+    public static final byte SECURITY_ID_OFFSET = 0x34;
+    public static final byte QUOTA_CHARGED_OFFSET = 0x38;
+    public static final byte UPDATE_SEQUENCE_NUMBER_OFFSET = 0x40;
+
+    private long cTime;
+    private long aTime;
+    private long mTime;
+    private long rTime;
+    private long quota;
+    private long updateSequenceNumber;
+    private DosPermissions dosPermissions;
+    private int maxVersions;
+    private int versionNumber;
+    private int classId;
+    private int ownerId;
+    private int securityId;
+
+    public StandardInformation(ByteBuffer bb) {
+        cTime = parseTimestamp(bb, CREATION_TIME_OFFSET);
+        aTime = parseTimestamp(bb, ALTERATION_TIME_OFFSET);
+        mTime = parseTimestamp(bb, MFT_CHANGE_TIME_OFFSET);
+        rTime = parseTimestamp(bb, READ_TIME_OFFSET);
+        dosPermissions = parseDosPermissions(bb, DOS_FILE_PERMISSIONS_OFFSET);
+        maxVersions = bb.getInt(MAX_VERSIONS_OFFSET);
+        versionNumber = bb.getInt(VERSION_NUMBER_OFFSET);
+        classId = bb.getInt(CLASS_ID_OFFSET);
+        ownerId = bb.getInt(OWNER_ID_OFFSET);
+        securityId = bb.getInt(SECURITY_ID_OFFSET);
+        quota = bb.getLong(QUOTA_CHARGED_OFFSET);
+        updateSequenceNumber = bb.getLong(UPDATE_SEQUENCE_NUMBER_OFFSET);
+    }
+
+    private DosPermissions parseDosPermissions(ByteBuffer bb, int offset) {
+        return new DosPermissions();
+    }
+
+    public long getFileCreationTime() {
+        return cTime;
+    }
+
+    public long getFileModificationTime() {
+        return aTime;
+    }
+
+    public long getMftModificationTime() {
+        return mTime;
+    }
+
+    public long getFileAccessTime() {
+        return rTime;
+    }
+
+    public DosPermissions getDosPermissions() {
+        return dosPermissions;
+    }
+
+    public int getMaxVersions() {
+        return maxVersions;
+    }
+
+    public int getVersionNumber() {
+        return versionNumber;
+    }
+
+    public int getClassId() {
+        return classId;
+    }
+
+    /**
+     * Owner Id
+     * Win2k
+     */
+    public int getOwnerId() {
+        return ownerId;
+    }
+
+    /**
+     * Security Id
+     * Win2k
+     */
+    public int getSecurityId() {
+        return securityId;
+    }
+
+    /**
+     * Quota Charged
+     * Win2k
+     */
+    public long getQuotaCharged() {
+        return quota;
+    }
+
+    /**
+     * Update Sequence Number (USN)
+     * Win2k
+     */
+    public long getUpdateSequenceNumber() {
+        return updateSequenceNumber;
+    }
 }

@@ -15,81 +15,45 @@
  */
 package net.alphadev.ntfslib.structures.attributes;
 
+import java.util.ArrayList;
 import java.util.EnumSet;
 
 public enum FileFlag {
-    /**
-     * 0x0001
-     */
-    READ_ONLY,
+    READ_ONLY(0x0001),
+    HIDDEN(0x0002),
+    SYSTEM(0x0004),
+    ARCHIVE(0x0020),
+    DEVICE(0x0040),
+    NORMAL(0x0080),
+    TEMPORARY(0x0100),
+    SPARSE_FILE(0x0200),
+    REPARSE_POINT(0x0400),
+    COMPRESSED(0x0800),
+    OFFLINE(0x1000),
+    NOT_CONTENT_INDEXED(0x2000),
+    ENCRYPTED(0x4000),
+    DIRECTORY(0x10000000),
+    INDEX_VIEW(0x20000000);
 
-    /**
-     * 0x0002
-     */
-    HIDDEN,
+    private int value;
 
-    /**
-     * 0x0004
-     */
-    SYSTEM,
+    FileFlag(int value) {
+        this.value = value;
+    }
 
-    /**
-     * 0x0020
-     */
-    ARCHIVE,
+    public int get() {
+        return value;
+    }
 
-    /**
-     * 0x0040
-     */
-    DEVICE,
+    public static EnumSet<FileFlag> parse(int value) {
+        ArrayList<FileFlag> retval = new ArrayList<>();
 
-    /**
-     * 0x0080
-     */
-    NORMAL,
+        for (FileFlag flag: FileFlag.values()) {
+            if ((value & flag.get()) == flag.get()) {
+                retval.add(flag);
+            }
+        }
 
-    /**
-     * 0x0100
-     */
-    TEMPORARY,
-
-    /**
-     * 0x0200
-     */
-    SPARSE_FILE,
-
-    /**
-     * 0x0400
-     */
-    REPARSE_POINT,
-
-    /**
-     * 0x0800
-     */
-    COMPRESSED,
-
-    /**
-     * 0x1000
-     */
-    OFFLINE,
-
-    /**
-     * 0x2000
-     */
-    NOT_CONTENT_INDEXED,
-
-    /**
-     * 0x4000
-     */
-    ENCRYPTED,
-
-    /**
-     * 0x10000000
-     */
-    DIRECTORY,
-
-    /**
-     * 0x20000000
-     */
-    INDEX_VIEW
+        return EnumSet.copyOf(retval);
+    }
 }

@@ -47,17 +47,13 @@ public class Filename extends Attribute {
 
     public Filename(ByteBuffer bb) {
         parentDirectory = bb.getLong(PARENT_DIRECTORY_OFFSET);
-        cTime = bb.getLong(CREATION_TIME_OFFSET);
-        aTime = bb.getLong(ALTERATION_TIME_OFFSET);
-        mTime = bb.getLong(MFT_CHANGE_TIME_OFFSET);
-        rTime = bb.getLong(READ_TIME_OFFSET);
+        cTime = parseTimestamp(bb, CREATION_TIME_OFFSET);
+        aTime = parseTimestamp(bb, ALTERATION_TIME_OFFSET);
+        mTime = parseTimestamp(bb, MFT_CHANGE_TIME_OFFSET);
+        rTime = parseTimestamp(bb, READ_TIME_OFFSET);
         allocatedFileSize = bb.getLong(ALLOCATED_SIZE_OFFSET);
         realFileSize = bb.getLong(REAL_SIZE_OFFSET);
-        flags = parse(bb.getInt(FLAGS_OFFSET));
-    }
-
-    public static EnumSet<FileFlag> parse(int value) {
-        return null;        
+        flags = FileFlag.parse(bb.getInt(FLAGS_OFFSET));
     }
 
     public long getParentDirectory() {

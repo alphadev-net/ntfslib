@@ -211,5 +211,4 @@ public final class RamDisk implements BlockDevice {
         
         return false;
     }
-    
 }
