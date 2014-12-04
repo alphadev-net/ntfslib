@@ -15,6 +15,8 @@
  */
 package net.alphadev.ntfslib.structures;
 
+import java.io.IOException;
+
 import net.alphadev.ntfslib.api.BlockDevice;
 import net.alphadev.ntfslib.structures.entries.MftEntry;
 import net.alphadev.ntfslib.structures.entries.VolumeInfo;
@@ -23,41 +25,34 @@ import net.alphadev.ntfslib.structures.entries.VolumeInfo;
  * @author Jan Seeger <jan@alphadev.net>
  */
 public class MasterFileTable {
-    public static final String VOLUME_INFO = "$Volume";
-
     private BlockDevice device;
     private VolumeInfo volumeInfo;
-    private long baseOffset;
-    private long clusterSize;
+    private long offset;
+    private int clusterSize;
 
-    private MasterFileTable(BlockDevice device, long offset) {
+    private MasterFileTable(BlockDevice device, long offset, int clusterSize) {
         this.device = device;
-        this.baseOffset = offset;
+        this.offset = offset;
+        this.clusterSize = clusterSize;
     }
 
     public static MasterFileTable read(BlockDevice device, BootSector boot) {
         final ExtendedBpb partitionParameter = boot.getBootPartitionParameter();
         final long mftMainStart = partitionParameter.getMftLogicalCluster();
         final long mftCopyStart = partitionParameter.getMftMirrorLogicalCluster();
-
-        final long clusterSize = 0;//partitionParameter.
-        final MasterFileTable mainMft = new MasterFileTable(device, mftMainStart);
+        final int clusterSize = (int) partitionParameter.getClustersPerMftRecord();
+        final MasterFileTable mainMft = new MasterFileTable(device, mftMainStart, clusterSize);
         return mainMft;
     }
 
-    public <T extends MftEntry> T getEntry(String entryNumber) {
-        return null;
+    public MftEntry getEntry(KnownMftEntries entry) throws IOException {
+        return getEntry(entry.getValue());
     }
 
-    public <T extends MftEntry> T getEntry(long entryNumber) {
-        return null;
-    }
+    public MftEntry getEntry(long entryNumber) throws IOException {
+        final long beginIndex = offset * entryNumber;
+        final MftEntry entry = new MftEntry(device, beginIndex, clusterSize);
 
-    public VolumeInfo getVolumeInfo() {
-        if(volumeInfo == null) {
-            volumeInfo = (VolumeInfo) getEntry(VOLUME_INFO);
-        }
-
-        return volumeInfo;
+        return entry;
     }
 }

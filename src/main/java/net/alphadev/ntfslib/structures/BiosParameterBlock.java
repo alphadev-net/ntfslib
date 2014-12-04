@@ -84,4 +84,12 @@ public class BiosParameterBlock {
     public byte getMediaDescriptor() {
         return mediaDescriptor;
     }
+
+    protected long asBytes(long cluster) {
+		if (cluster > 0) {
+			return cluster * sectorsPerCluster * bytesPerSector;
+		}
+
+		return (1 << -cluster);
+	}
 }

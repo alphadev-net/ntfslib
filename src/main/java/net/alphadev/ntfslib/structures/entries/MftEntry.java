@@ -15,23 +15,27 @@
  */
 package net.alphadev.ntfslib.structures.entries;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
 
 import net.alphadev.ntfslib.api.BlockDevice;
 import net.alphadev.ntfslib.structures.attributes.AttributeType;
 
-public abstract class MftEntry {
-    public static final int FILE_SIGNATURE = 0x0;
-    public static final int BAD_SIGNATURE = 0x0;
+public class MftEntry {
+    public static final int FILE_SIGNATURE = 0x454c4946;
+    public static final int BAAD_SIGNATURE = 0x44414142;
 
     private BlockDevice device;
     private long offset;
     private int clusterSize;
 
-    public MftEntry(BlockDevice device, long offset, int clusterSize) {
+    public MftEntry(BlockDevice device, long offset, int clusterSize) throws IOException {
         this.device = device;
         this.offset = offset;
         this.clusterSize = clusterSize;
+
+        ByteBuffer buffer = ByteBuffer.allocate(clusterSize);
+        device.read(offset, buffer);
     }
 
     public ByteBuffer getAttribute(AttributeType attribute) {

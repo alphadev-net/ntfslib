@@ -48,20 +48,32 @@ public class ExtendedBpb extends BiosParameterBlock {
         return totalSectors;
     }
 
+    /**
+     * Returns the position of the main MFT as Bytes.
+     */
     public long getMftLogicalCluster() {
-        return mftLogicalCluster;
+        return asBytes(mftLogicalCluster);
     }
 
+    /**
+     * Returns the position of the copy MFT as Bytes.
+     */
     public long getMftMirrorLogicalCluster() {
-        return mftMirrorLogicalCluster;
+        return asBytes(mftMirrorLogicalCluster);
     }
 
-    public byte getClustersPerMftRecord() {
-        return clustersPerMftRecord;
+    /**
+     * Returns the size of a MFT record as Bytes.
+     */
+    public long getClustersPerMftRecord() {
+        return asBytes(clustersPerMftRecord);
     }
 
-    public byte getClustersPerIndexBuffer() {
-        return clustersPerIndexBuffer;
+    /**
+     * Returns the size of an IndexBuffer as Bytes.
+     */
+    public long getClustersPerIndexBuffer() {
+        return asBytes(clustersPerIndexBuffer);
     }
 
     public long getVolumeSerialNumber() {

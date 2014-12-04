@@ -22,14 +22,12 @@ import net.alphadev.ntfslib.api.BlockDevice;
 import net.alphadev.ntfslib.structures.attributes.AttributeType;
 import net.alphadev.ntfslib.structures.entries.MftEntry;
 
-public class VolumeInfo extends MftEntry {
+public class VolumeInfo  {
     private String volumeLabel;
 
-    public VolumeInfo(BlockDevice device, long offset, int clusterSize) {
-        super(device, offset, clusterSize);
-
+    public VolumeInfo(MftEntry entry) {
         try {
-            ByteBuffer buffer = getAttribute(AttributeType.VOLUME_NAME);
+            ByteBuffer buffer = entry.getAttribute(AttributeType.VOLUME_NAME);
             volumeLabel = new String(buffer.array(), "UTF-8");
         } catch (UnsupportedEncodingException ex) {
             // utf8 unsupported?!

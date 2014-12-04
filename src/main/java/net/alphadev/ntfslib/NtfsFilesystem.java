@@ -20,7 +20,10 @@ import java.io.IOException;
 import net.alphadev.ntfslib.api.BlockDevice;
 import net.alphadev.ntfslib.api.Filesystem;
 import net.alphadev.ntfslib.structures.BootSector;
+import net.alphadev.ntfslib.structures.KnownMftEntries;
 import net.alphadev.ntfslib.structures.MasterFileTable;
+import net.alphadev.ntfslib.structures.entries.MftEntry;
+import net.alphadev.ntfslib.structures.entries.VolumeInfo;
 
 /**
  * NTFS Filesystem.
@@ -30,6 +33,7 @@ import net.alphadev.ntfslib.structures.MasterFileTable;
 public class NtfsFilesystem implements Filesystem {
     private BlockDevice mDevice;
     private MasterFileTable mft;
+    private VolumeInfo volumeInfo;
 
     public NtfsFilesystem(BlockDevice device) throws IOException {
         mDevice = device;
@@ -40,6 +44,15 @@ public class NtfsFilesystem implements Filesystem {
 
     @Override
     public String getVolumeName() {
-        return mft.getVolumeInfo().getVolumeLabel();
+        if (volumeInfo == null) {
+            try {
+                MftEntry entry = mft.getEntry(KnownMftEntries.VOLUME_INFO);
+                volumeInfo = new VolumeInfo(entry);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        return volumeInfo.getVolumeLabel();
     }
 }
