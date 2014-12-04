@@ -13,12 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.alphadev.ntfslib.structures;
+package net.alphadev.ntfslib.structures.entries;
 
 import java.nio.ByteBuffer;
 
+import net.alphadev.ntfslib.structures.attributes.AttributeType;
+
 public class MftEntry {
-    public ByteBuffer getAttribute(AttributeType attributeName) {
+    public ByteBuffer getAttribute(AttributeType attribute) {
         return null;
     }
 }

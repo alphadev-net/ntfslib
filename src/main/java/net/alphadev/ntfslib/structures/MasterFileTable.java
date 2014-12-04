@@ -16,6 +16,7 @@
 package net.alphadev.ntfslib.structures;
 
 import net.alphadev.ntfslib.api.BlockDevice;
+import net.alphadev.ntfslib.structures.entries.MftEntry;
 
 /**
  * @author Jan Seeger <jan@alphadev.net>

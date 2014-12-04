@@ -22,7 +22,7 @@ import net.alphadev.ntfslib.api.Filesystem;
 import net.alphadev.ntfslib.structures.BootSector;
 import net.alphadev.ntfslib.structures.ExtendedBpb;
 import net.alphadev.ntfslib.structures.MasterFileTable;
-import net.alphadev.ntfslib.structures.VolumeInfo;
+import net.alphadev.ntfslib.structures.entries.VolumeInfo;
 
 /**
  * NTFS Filesystem.

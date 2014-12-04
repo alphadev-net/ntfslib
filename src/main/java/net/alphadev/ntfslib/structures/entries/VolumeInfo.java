@@ -13,12 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.alphadev.ntfslib.structures;
+package net.alphadev.ntfslib.structures.entries;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 
 import net.alphadev.ntfslib.api.BlockDevice;
+import net.alphadev.ntfslib.structures.attributes.AttributeType;
+import net.alphadev.ntfslib.structures.entries.MftEntry;
 
 public class VolumeInfo {
     private String volumeLabel;
