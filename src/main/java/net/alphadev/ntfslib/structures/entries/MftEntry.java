@@ -17,9 +17,23 @@ package net.alphadev.ntfslib.structures.entries;
 
 import java.nio.ByteBuffer;
 
+import net.alphadev.ntfslib.api.BlockDevice;
 import net.alphadev.ntfslib.structures.attributes.AttributeType;
 
-public class MftEntry {
+public abstract class MftEntry {
+    public static final int FILE_SIGNATURE = 0x0;
+    public static final int BAD_SIGNATURE = 0x0;
+
+    private BlockDevice device;
+    private long offset;
+    private int clusterSize;
+
+    public MftEntry(BlockDevice device, long offset, int clusterSize) {
+        this.device = device;
+        this.offset = offset;
+        this.clusterSize = clusterSize;
+    }
+
     public ByteBuffer getAttribute(AttributeType attribute) {
         return null;
     }

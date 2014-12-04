@@ -35,7 +35,7 @@ public class NtfsFilesystem implements Filesystem {
         mDevice = device;
 
         final BootSector boot = BootSector.read(device);
-        mft = MasterFileTable.read(device, boot.getBootPartitionParameter());
+        mft = MasterFileTable.read(device, boot);
     }
 
     @Override

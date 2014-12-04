@@ -28,31 +28,34 @@ public class MasterFileTable {
     private BlockDevice device;
     private VolumeInfo volumeInfo;
     private long baseOffset;
+    private long clusterSize;
 
     private MasterFileTable(BlockDevice device, long offset) {
         this.device = device;
         this.baseOffset = offset;
     }
 
-    public static MasterFileTable read(BlockDevice device, ExtendedBpb partitionParameter) {
-        long mftMainStart = partitionParameter.getMftLogicalCluster();
-        long mftCopyStart = partitionParameter.getMftMirrorLogicalCluster();
+    public static MasterFileTable read(BlockDevice device, BootSector boot) {
+        final ExtendedBpb partitionParameter = boot.getBootPartitionParameter();
+        final long mftMainStart = partitionParameter.getMftLogicalCluster();
+        final long mftCopyStart = partitionParameter.getMftMirrorLogicalCluster();
 
-        MasterFileTable mainMft = new MasterFileTable(device, mftMainStart);
+        final long clusterSize = 0;//partitionParameter.
+        final MasterFileTable mainMft = new MasterFileTable(device, mftMainStart);
         return mainMft;
     }
 
-    public MftEntry getEntry(String entryName) {
+    public <T extends MftEntry> T getEntry(String entryNumber) {
         return null;
     }
 
-    public MftEntry getEntry(long entryNumber) {
+    public <T extends MftEntry> T getEntry(long entryNumber) {
         return null;
     }
 
     public VolumeInfo getVolumeInfo() {
         if(volumeInfo == null) {
-            volumeInfo = VolumeInfo.read(getEntry(VOLUME_INFO));
+            volumeInfo = (VolumeInfo) getEntry(VOLUME_INFO);
         }
 
         return volumeInfo;
