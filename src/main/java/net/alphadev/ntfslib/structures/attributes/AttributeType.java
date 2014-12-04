@@ -16,99 +16,56 @@
 package net.alphadev.ntfslib.structures.attributes;
 
 public enum AttributeType {
-    /**
-     * $STANDARD_INFORMATION = 0x10
-     */
-    STANDARD_INFORMATION,
+    STANDARD_INFORMATION((byte) 0x10),
+    ATTRIBUTE_LIST((byte) 0x20),
+    FILE_NAME((byte) 0x30),
 
     /**
-     * $ATTRIBUTE_LIST = 0x20
-     */
-     ATTRIBUTE_LIST,
-
-    /**
-     * $FILE_NAME = 0x30
-     */
-     FILE_NAME,
-
-    /**
-     * $VOLUME_VERSION = 0x40
      * WinNt
      */
-     VOLUME_VERSION,
+    VOLUME_VERSION((byte) 0x40),
 
     /**
-     * $OBJECT_ID = 0x40
      * Win2k
      */
-     OBJECT_ID,
+    OBJECT_ID((byte) 0x40),
+    SECURITY_DESCRIPTOR((byte) 0x50),
+    VOLUME_NAME((byte) 0x60),
+    VOLUME_INFORMATION((byte) 0x70),
+    DATA((byte) 0x80),
+    INDEX_ROOT((byte) 0x90),
+    INDEX_ALLOCATION((byte) 0xa0),
+    BITMAP((byte) 0xb0),
 
     /**
-     * $SECURITY_DESCRIPTOR = 0x50
-     */
-     SECURITY_DESCRIPTOR,
-
-    /**
-     * $VOLUME_NAME = 0x60
-     */
-     VOLUME_NAME,
-
-    /**
-     * $VOLUME_INFORMATION = 0x70
-     */
-     VOLUME_INFORMATION,
-
-    /**
-     * $DATA = 0x80
-     */
-     DATA,
-
-    /**
-     * $INDEX_ROOT = 0x90
-     */
-     INDEX_ROOT,
-
-    /**
-     * $INDEX_ALLOCATION = 0xa0
-     */
-     INDEX_ALLOCATION,
-
-    /**
-     * $BITMAP = 0xb0
-     */
-     BITMAP,
-
-    /**
-     * $SYMBOLIC_LINK = 0xc0
      * WinNt
      */
-     SYMBOLIC_LINK,
+    SYMBOLIC_LINK((byte) 0xc0),
 
     /**
-     * $REPARSE_POINT = 0xc0
      * Win2k
      */
-     REPARSE_POINT,
+    REPARSE_POINT((byte) 0xc0),
+    EA_INFORMATION((byte) 0xd0),
+    EA((byte) 0xe0),
 
     /**
-     * $EA_INFORMATION = 0xd0
-     */
-     EA_INFORMATION,
-
-    /**
-     * $EA = 0xe0
-     */
-     EA,
-
-    /**
-     * $PROPERTY_SET = 0xf0
      * WinNt
      */
-     PROPERTY_SET,
+    PROPERTY_SET((byte) 0xf0),
 
     /**
-     * $LOGGED_UTILITY_STREAM = 0x100
      * Win2k
      */
-     LOGGED_UTILITY_STREAM
+    LOGGED_UTILITY_STREAM((byte) 0x100);
+
+    private byte value;
+
+    AttributeType(byte value) {
+        this.value = value;
+    }
+
+    public byte getValue() {
+        return value;
+    }
 }

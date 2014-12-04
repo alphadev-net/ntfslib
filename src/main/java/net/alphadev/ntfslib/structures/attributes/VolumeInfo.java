@@ -13,21 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.alphadev.ntfslib.structures.entries;
+package net.alphadev.ntfslib.structures.attributes;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 
 import net.alphadev.ntfslib.api.BlockDevice;
-import net.alphadev.ntfslib.structures.attributes.AttributeType;
 import net.alphadev.ntfslib.structures.entries.MftEntry;
 
-public class VolumeInfo  {
+public class VolumeInfo extends Attribute {
     private String volumeLabel;
 
-    public VolumeInfo(MftEntry entry) {
+    public VolumeInfo(ByteBuffer buffer) {
         try {
-            ByteBuffer buffer = entry.getAttribute(AttributeType.VOLUME_NAME);
             volumeLabel = new String(buffer.array(), "UTF-8");
         } catch (UnsupportedEncodingException ex) {
             // utf8 unsupported?!

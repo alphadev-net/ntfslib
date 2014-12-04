@@ -17,29 +17,49 @@ package net.alphadev.ntfslib.structures.entries;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.HashMap;
+import java.util.Map;
 
 import net.alphadev.ntfslib.api.BlockDevice;
+import net.alphadev.ntfslib.structures.attributes.Attribute;
 import net.alphadev.ntfslib.structures.attributes.AttributeType;
 
 public class MftEntry {
     public static final int FILE_SIGNATURE = 0x454c4946;
     public static final int BAAD_SIGNATURE = 0x44414142;
 
+    private Map<AttributeType, ? extends Attribute> attributes;
     private BlockDevice device;
-    private long offset;
+    private final long entryOffset;
     private int clusterSize;
+    private long offset;
 
     public MftEntry(BlockDevice device, long offset, int clusterSize) throws IOException {
         this.device = device;
-        this.offset = offset;
+        this.entryOffset = offset;
         this.clusterSize = clusterSize;
+        this.attributes = new HashMap<>();
 
         ByteBuffer buffer = ByteBuffer.allocate(clusterSize);
         device.read(offset, buffer);
+
+        int magic = buffer.getInt(0);
+        if(magic != FILE_SIGNATURE) {
+            throw new IllegalArgumentException("no magic signature found!");
+        }
+
+        this.offset = entryOffset + 5;
     }
 
-    public ByteBuffer getAttribute(AttributeType attribute) {
+    public Attribute getAttribute(AttributeType attribute) {
+        if(!attributes.containsKey(attribute)) {
+            refreshAttributes();
+        }
+
+        return attributes.get(attribute);
+    }
+
+    private void refreshAttributes() {
         
-        return null;
     }
 }
