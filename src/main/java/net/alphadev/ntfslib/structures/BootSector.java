@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.alphadev.ntfslib;
+package net.alphadev.ntfslib.structures;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-import net.alphadev.ntfslib.Sector;
 import net.alphadev.ntfslib.api.BlockDevice;
+import net.alphadev.ntfslib.structures.Sector;
 
 public class BootSector extends Sector {
     public static final int OEM_ID_OFFSET = 0x03;

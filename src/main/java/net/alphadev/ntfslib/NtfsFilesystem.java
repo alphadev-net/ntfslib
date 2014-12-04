@@ -19,6 +19,9 @@ import java.io.IOException;
 
 import net.alphadev.ntfslib.api.BlockDevice;
 import net.alphadev.ntfslib.api.Filesystem;
+import net.alphadev.ntfslib.structures.BootSector;
+import net.alphadev.ntfslib.structures.MasterFileTable;
+import net.alphadev.ntfslib.structures.ExtendedBpb;
 
 /**
  * NTFS Filesystem.
@@ -27,16 +30,15 @@ import net.alphadev.ntfslib.api.Filesystem;
  */
 public class NtfsFilesystem implements Filesystem {
     private BlockDevice mDevice;
-    private MasterFileTable mftMain;
-    private MasterFileTable mftMirror;
+    private MasterFileTable mft;
 
     public NtfsFilesystem(BlockDevice device) throws IOException {
         mDevice = device;
 
         final BootSector boot = BootSector.read(device);
         ExtendedBpb pbp = boot.getBootPartitionParameter();
-        mftMain = new MasterFileTable(device, pbp.getMftLogicalCluster());
-        mftMirror = new MasterFileTable(device, pbp.getMftMirrorLogicalCluster());
+        mft = MasterFileTable.read(device, pbp.getMftLogicalCluster(),
+                pbp.getMftMirrorLogicalCluster());
     }
 
     @Override

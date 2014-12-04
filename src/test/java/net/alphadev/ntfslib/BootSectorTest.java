@@ -19,6 +19,7 @@ import java.io.IOException;
 
 import net.alphadev.ntfslib.api.BlockDevice;
 import net.alphadev.ntfslib.api.Filesystem;
+import net.alphadev.ntfslib.structures.BootSector;
 import net.alphadev.ntfslib.util.RamDisk;
 
 import org.junit.Assert;

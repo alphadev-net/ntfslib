@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.alphadev.ntfslib;
+package net.alphadev.ntfslib.structures;
 
 import net.alphadev.ntfslib.api.BlockDevice;
 
@@ -21,7 +21,12 @@ import net.alphadev.ntfslib.api.BlockDevice;
  * @author Jan Seeger <jan@alphadev.net>
  */
 public class MasterFileTable {
-    public MasterFileTable(BlockDevice device, long offset) {
+    private MasterFileTable(BlockDevice device, long offset, boolean isMirror) {
         
+    }
+
+    public static MasterFileTable read(BlockDevice device, long offsetMain, long offsetMirror) {
+        //MasterFileTable main = 
+        return null;
     }
 }
