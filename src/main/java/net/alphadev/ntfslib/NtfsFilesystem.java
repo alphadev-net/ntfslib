@@ -27,11 +27,16 @@ import net.alphadev.ntfslib.api.Filesystem;
  */
 public class NtfsFilesystem implements Filesystem {
     private BlockDevice mDevice;
+    private MasterFileTable mftMain;
+    private MasterFileTable mftMirror;
 
     public NtfsFilesystem(BlockDevice device) throws IOException {
         mDevice = device;
 
-        final BootSector boot = new BootSector(device);
+        final BootSector boot = BootSector.read(device);
+        ExtendedBpb pbp = boot.getBootPartitionParameter();
+        mftMain = new MasterFileTable(device, pbp.getMftLogicalCluster());
+        mftMirror = new MasterFileTable(device, pbp.getMftMirrorLogicalCluster());
     }
 
     @Override

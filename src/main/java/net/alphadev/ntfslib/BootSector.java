@@ -19,10 +19,29 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
+import net.alphadev.ntfslib.Sector;
 import net.alphadev.ntfslib.api.BlockDevice;
 
-public class BootSector {
-    public BootSector(BlockDevice device) throws IOException {
+public class BootSector extends Sector {
+    public static final int OEM_ID_OFFSET = 0x03;
+    
+    /**
+     * The size of a boot sector in bytes.
+     */
+    public final static int SIZE = 512;
+
+    private long oemId;
+    private ExtendedBpb pbp;
+
+    private BootSector(BlockDevice device) throws IOException {
+        super(device, 0, SIZE);
+        markDirty();
+
+        oemId = get64(OEM_ID_OFFSET);
+        pbp = new ExtendedBpb(buffer);
+    }
+
+    public static BootSector read(BlockDevice device) throws IOException {
         ByteBuffer bb = ByteBuffer.allocate(512);
         bb.order(ByteOrder.LITTLE_ENDIAN);
         device.read(0, bb);
@@ -30,5 +49,11 @@ public class BootSector {
         if ((bb.get(510) & 0xff) != 0x55 ||
                 (bb.get(511) & 0xff) != 0xaa) throw new IOException(
                 "missing boot sector signature");
+
+        return new BootSector(device);
+    }
+
+    public ExtendedBpb getBootPartitionParameter() {
+        return pbp;
     }
 }

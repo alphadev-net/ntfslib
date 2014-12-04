@@ -15,12 +15,11 @@
  */
 package net.alphadev.ntfslib;
 
-import de.waldheinz.fs.util.RamDisk;
-
 import java.io.IOException;
 
 import net.alphadev.ntfslib.api.BlockDevice;
 import net.alphadev.ntfslib.api.Filesystem;
+import net.alphadev.ntfslib.util.RamDisk;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -31,6 +30,6 @@ public class BootSectorTest {
     @Test
     public void readVolumeName() throws IOException {
         dev = RamDisk.readGzipped(getClass().getResourceAsStream("ntfs.img.gz"));
-        BootSector bs = new BootSector(dev);
+        BootSector bs = BootSector.read(dev);
     }
 }

@@ -15,9 +15,13 @@
  */
 package net.alphadev.ntfslib;
 
+import net.alphadev.ntfslib.api.BlockDevice;
+
 /**
  * @author Jan Seeger <jan@alphadev.net>
  */
 public class MasterFileTable {
-    
+    public MasterFileTable(BlockDevice device, long offset) {
+        
+    }
 }
