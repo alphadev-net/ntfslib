@@ -15,28 +15,28 @@
  */
 package net.alphadev.ntfslib.structures;
 
+import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
+
 import net.alphadev.ntfslib.api.BlockDevice;
 
-/**
- * @author Jan Seeger <jan@alphadev.net>
- */
-public class MasterFileTable {
-    private BlockDevice device;
+public class VolumeInfo {
+    private String volumeLabel;
 
-    private MasterFileTable(BlockDevice device, long offset, boolean isMirror) {
-        this.device = device;
+    private VolumeInfo(MftEntry volumeEntry) {
+        try {
+            ByteBuffer buffer = volumeEntry.getAttribute(AttributeType.VOLUME_NAME);
+            volumeLabel = new String(buffer.array(), "UTF-8");
+        } catch (UnsupportedEncodingException ex) {
+            // utf8 unsupported?!
+        }
     }
 
-    public static MasterFileTable read(BlockDevice device, long offsetMain, long offsetMirror) {
-        //MasterFileTable main = 
-        return null;
+    public static VolumeInfo read(MftEntry volumeEntry) {
+        return new VolumeInfo(volumeEntry);
     }
 
-    public MftEntry getEntry(String entryName) {
-        return null;
-    }
-
-    public MftEntry getEntry(long entryNumber) {
-        return null;
+    public String getVolumeLabel() {
+        return volumeLabel;
     }
 }

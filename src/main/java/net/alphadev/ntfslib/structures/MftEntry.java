@@ -15,28 +15,10 @@
  */
 package net.alphadev.ntfslib.structures;
 
-import net.alphadev.ntfslib.api.BlockDevice;
+import java.nio.ByteBuffer;
 
-/**
- * @author Jan Seeger <jan@alphadev.net>
- */
-public class MasterFileTable {
-    private BlockDevice device;
-
-    private MasterFileTable(BlockDevice device, long offset, boolean isMirror) {
-        this.device = device;
-    }
-
-    public static MasterFileTable read(BlockDevice device, long offsetMain, long offsetMirror) {
-        //MasterFileTable main = 
-        return null;
-    }
-
-    public MftEntry getEntry(String entryName) {
-        return null;
-    }
-
-    public MftEntry getEntry(long entryNumber) {
+public class MftEntry {
+    public ByteBuffer getAttribute(AttributeType attributeName) {
         return null;
     }
 }

@@ -20,8 +20,9 @@ import java.io.IOException;
 import net.alphadev.ntfslib.api.BlockDevice;
 import net.alphadev.ntfslib.api.Filesystem;
 import net.alphadev.ntfslib.structures.BootSector;
-import net.alphadev.ntfslib.structures.MasterFileTable;
 import net.alphadev.ntfslib.structures.ExtendedBpb;
+import net.alphadev.ntfslib.structures.MasterFileTable;
+import net.alphadev.ntfslib.structures.VolumeInfo;
 
 /**
  * NTFS Filesystem.
@@ -29,8 +30,11 @@ import net.alphadev.ntfslib.structures.ExtendedBpb;
  * @author Jan Seeger
  */
 public class NtfsFilesystem implements Filesystem {
+    public static final String VOLUME_INFO = "$Volume";
+
     private BlockDevice mDevice;
     private MasterFileTable mft;
+    private VolumeInfo volumeInfo;
 
     public NtfsFilesystem(BlockDevice device) throws IOException {
         mDevice = device;
@@ -39,10 +43,12 @@ public class NtfsFilesystem implements Filesystem {
         ExtendedBpb pbp = boot.getBootPartitionParameter();
         mft = MasterFileTable.read(device, pbp.getMftLogicalCluster(),
                 pbp.getMftMirrorLogicalCluster());
+
+        volumeInfo = VolumeInfo.read(mft.getEntry(VOLUME_INFO));
     }
 
     @Override
     public String getVolumeName() {
-        return null;
+        return volumeInfo.getVolumeLabel();
     }
 }
