@@ -15,25 +15,9 @@
  */
 package net.alphadev.ntfslib;
 
-import net.alphadev.ntfslib.api.BlockDevice;
-import net.alphadev.ntfslib.api.Filesystem;
-
 /**
- * NTFS Filesystem.
- * 
- * @author Jan Seeger
+ * @author Jan Seeger <jan@alphadev.net>
  */
-public class NtfsFilesystem implements Filesystem {
-    private BlockDevice mDevice;
-
-    public NtfsFilesystem(BlockDevice device) {
-        mDevice = device;
-
-        final BootSector boot = new BootSector(device);
-    }
-
-    @Override
-    public String getVolumeName() {
-        return null;
-    }
+public class MasterFileTable {
+    
 }

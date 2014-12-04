@@ -13,27 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.alphadev.ntfslib;
+package net.alphadev.ntfslib.api;
 
-import net.alphadev.ntfslib.api.BlockDevice;
-import net.alphadev.ntfslib.api.Filesystem;
-
-/**
- * NTFS Filesystem.
- * 
- * @author Jan Seeger
- */
-public class NtfsFilesystem implements Filesystem {
-    private BlockDevice mDevice;
-
-    public NtfsFilesystem(BlockDevice device) {
-        mDevice = device;
-
-        final BootSector boot = new BootSector(device);
-    }
-
-    @Override
-    public String getVolumeName() {
-        return null;
-    }
+public interface Filesystem {
+    String getVolumeName();
 }

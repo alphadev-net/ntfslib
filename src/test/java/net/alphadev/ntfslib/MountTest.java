@@ -15,25 +15,26 @@
  */
 package net.alphadev.ntfslib;
 
+import de.waldheinz.fs.util.RamDisk;
+
+import java.io.IOException;
+
 import net.alphadev.ntfslib.api.BlockDevice;
 import net.alphadev.ntfslib.api.Filesystem;
 
-/**
- * NTFS Filesystem.
- * 
- * @author Jan Seeger
- */
-public class NtfsFilesystem implements Filesystem {
-    private BlockDevice mDevice;
+import org.junit.Assert;
+import org.junit.Ignore;
+import org.junit.Test;
 
-    public NtfsFilesystem(BlockDevice device) {
-        mDevice = device;
+public class MountTest {
+    private BlockDevice dev;
 
-        final BootSector boot = new BootSector(device);
-    }
-
-    @Override
-    public String getVolumeName() {
-        return null;
+    @Test
+    @Ignore
+    public void readVolumeName() throws IOException {
+        dev = RamDisk.readGzipped(getClass().getResourceAsStream("ntfs.img.gz"));
+        Filesystem ntfs = new NtfsFilesystem(dev);
+        String label = ntfs.getVolumeName();
+        Assert.assertEquals("Bla", label);
     }
 }

@@ -13,27 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.alphadev.ntfslib;
+package net.alphadev.ntfslib.api;
 
-import net.alphadev.ntfslib.api.BlockDevice;
-import net.alphadev.ntfslib.api.Filesystem;
+import java.io.Closeable;
+import java.io.IOException;
+import java.nio.ByteBuffer;
 
-/**
- * NTFS Filesystem.
- * 
- * @author Jan Seeger
- */
-public class NtfsFilesystem implements Filesystem {
-    private BlockDevice mDevice;
-
-    public NtfsFilesystem(BlockDevice device) {
-        mDevice = device;
-
-        final BootSector boot = new BootSector(device);
-    }
-
-    @Override
-    public String getVolumeName() {
-        return null;
-    }
+public interface BlockDevice extends Closeable {
+    long getSize();
+    void read(long devOffset, ByteBuffer dest) throws IOException;
+    void write(long devOffset, ByteBuffer src) throws IOException;
+    void flush() throws IOException;
+    int getSectorSize();
+    boolean isClosed();
+    boolean isReadOnly();
 }
