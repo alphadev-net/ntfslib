@@ -15,20 +15,22 @@
  */
 package net.alphadev.ntfslib;
 
+import de.waldheinz.fs.util.RamDisk;
+
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 
 import net.alphadev.ntfslib.api.BlockDevice;
+import net.alphadev.ntfslib.api.Filesystem;
 
-public class BootSector {
-    public BootSector(BlockDevice device) throws IOException {
-        ByteBuffer bb = ByteBuffer.allocate(512);
-        bb.order(ByteOrder.LITTLE_ENDIAN);
-        device.read(0, bb);
+import org.junit.Assert;
+import org.junit.Test;
 
-        if ((bb.get(510) & 0xff) != 0x55 ||
-                (bb.get(511) & 0xff) != 0xaa) throw new IOException(
-                "missing boot sector signature");
+public class BootSectorTest {
+    private BlockDevice dev;
+
+    @Test
+    public void readVolumeName() throws IOException {
+        dev = RamDisk.readGzipped(getClass().getResourceAsStream("ntfs.img.gz"));
+        BootSector bs = new BootSector(dev);
     }
 }

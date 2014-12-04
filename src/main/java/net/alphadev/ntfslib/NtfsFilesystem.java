@@ -15,6 +15,8 @@
  */
 package net.alphadev.ntfslib;
 
+import java.io.IOException;
+
 import net.alphadev.ntfslib.api.BlockDevice;
 import net.alphadev.ntfslib.api.Filesystem;
 
@@ -26,7 +28,7 @@ import net.alphadev.ntfslib.api.Filesystem;
 public class NtfsFilesystem implements Filesystem {
     private BlockDevice mDevice;
 
-    public NtfsFilesystem(BlockDevice device) {
+    public NtfsFilesystem(BlockDevice device) throws IOException {
         mDevice = device;
 
         final BootSector boot = new BootSector(device);
