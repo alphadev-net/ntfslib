@@ -39,11 +39,12 @@ class Sector {
 
     private boolean dirty;
     
-    protected Sector(BlockDevice device, long offset, int size) {
+    protected Sector(BlockDevice device, long offset, int size) throws IOException {
         this.offset = offset;
         this.device = device;
         this.buffer = ByteBuffer.allocate(size);
         this.buffer.order(ByteOrder.LITTLE_ENDIAN);
+        read();
         this.dirty = true;
     }
     
@@ -130,5 +131,14 @@ class Sector {
      */
     protected long getOffset() {
         return this.offset;
+    }
+
+    protected String getString(int offset, int length) {
+        byte[] values = new byte[length];
+        for(int i = 0; i < length; i++) {
+            values[i] = (byte)get8(offset+1);
+            System.out.println(values[offset+1]);
+        }
+        return new String(values);
     }
 }

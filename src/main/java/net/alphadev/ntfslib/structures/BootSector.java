@@ -24,21 +24,19 @@ import net.alphadev.ntfslib.structures.Sector;
 
 public class BootSector extends Sector {
     public static final int OEM_ID_OFFSET = 0x03;
-    
+
     /**
      * The size of a boot sector in bytes.
      */
     public final static int SIZE = 512;
 
-    private long oemId;
+    private String oemId;
     private ExtendedBpb pbp;
 
     private BootSector(BlockDevice device) throws IOException {
         super(device, 0, SIZE);
-        markDirty();
-
-        oemId = get64(OEM_ID_OFFSET);
-        pbp = new ExtendedBpb(buffer);
+        oemId = getString(OEM_ID_OFFSET, 8);
+        pbp = new ExtendedBpb(super.buffer);
     }
 
     public static BootSector read(BlockDevice device) throws IOException {
@@ -55,5 +53,9 @@ public class BootSector extends Sector {
 
     public ExtendedBpb getBootPartitionParameter() {
         return pbp;
+    }
+
+    public String getOemId() {
+        return oemId;
     }
 }
