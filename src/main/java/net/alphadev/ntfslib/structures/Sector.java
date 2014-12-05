@@ -28,7 +28,7 @@ import net.alphadev.ntfslib.api.BlockDevice;
  * 
  * @author Matthias Treydte &lt;waldheinz at gmail.com&gt;
  */
-class Sector {
+public abstract class Sector {
     private final BlockDevice device;
     private final long offset;
 
@@ -59,6 +59,7 @@ class Sector {
         buffer.rewind();
         buffer.limit(buffer.capacity());
         device.read(offset, buffer);
+        buffer.rewind();
         this.dirty = false;
     }
     
@@ -136,8 +137,7 @@ class Sector {
     protected String getString(int offset, int length) {
         byte[] values = new byte[length];
         for(int i = 0; i < length; i++) {
-            values[i] = (byte)get8(offset+1);
-            System.out.println(values[offset+1]);
+            values[i] = (byte) get8(offset + i);
         }
         return new String(values);
     }

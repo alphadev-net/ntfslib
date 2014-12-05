@@ -39,6 +39,6 @@ public class BootSectorTest {
     @Test
     public void readBootSector() throws IOException {
         BootSector bs = BootSector.read(dev);
-        Assert.assertEquals("NTFS", bs.getOemId());
+        Assert.assertEquals("NTFS    ", bs.getOemId());
     }
 }
