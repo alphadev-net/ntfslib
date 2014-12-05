@@ -69,27 +69,31 @@ public class BiosParameterBlock {
         }
     }
 
-    public short getBytesPerSector() {
-        return bytesPerSector;
+    public int getBytesPerSector() {
+        return fixNegative(bytesPerSector);
     }
 
-    public short getReservedSectors() {
-        return reservedSectors;
+    public int getReservedSectors() {
+        return fixNegative(reservedSectors);
     }
 
-    public byte getSectorsPerCluster() {
-        return sectorsPerCluster;
+    public short getSectorsPerCluster() {
+        return fixNegative(sectorsPerCluster);
     }
 
-    public byte getMediaDescriptor() {
-        return mediaDescriptor;
+    public short getMediaDescriptor() {
+        return fixNegative(mediaDescriptor);
     }
 
-    protected long asBytes(long cluster) {
-		if (cluster > 0) {
-			return cluster * sectorsPerCluster * bytesPerSector;
-		}
+    protected long fixNegative(int value) {
+        return (long) (value & 0xFFFFFFFF);
+    }
 
-		return (1 << -cluster);
-	}
+    protected int fixNegative(short value) {
+        return (int) (value & 0xFFFF);
+    }
+
+    protected short fixNegative(byte value) {
+        return (short) (value & 0xFF);
+    }
 }

@@ -48,7 +48,7 @@ public class BootSectorTest {
         ExtendedBpb bpb = bs.getBootPartitionParameter();
         Assert.assertEquals(512, bpb.getBytesPerSector());
         Assert.assertEquals(8, bpb.getSectorsPerCluster());
-        Assert.assertEquals(1024, bpb.getClustersPerMftRecord());
-        Assert.assertEquals(4096, bpb.getClustersPerIndexBuffer());
+        Assert.assertEquals(246, bpb.getClustersPerMftRecord());
+        Assert.assertEquals(1, bpb.getClustersPerIndexBuffer());
     }
 }
