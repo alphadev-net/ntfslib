@@ -41,4 +41,14 @@ public class BootSectorTest {
         BootSector bs = BootSector.read(dev);
         Assert.assertEquals("NTFS    ", bs.getOemId());
     }
+
+    @Test
+    public void readPartitionParameters() throws IOException {
+        BootSector bs = BootSector.read(dev);
+        ExtendedBpb bpb = bs.getBootPartitionParameter();
+        Assert.assertEquals(512, bpb.getBytesPerSector());
+        Assert.assertEquals(8, bpb.getSectorsPerCluster());
+        Assert.assertEquals(1024, bpb.getClustersPerMftRecord());
+        Assert.assertEquals(4096, bpb.getClustersPerIndexBuffer());
+    }
 }
