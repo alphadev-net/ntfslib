@@ -17,6 +17,7 @@ package net.alphadev.ntfslib.structures.entries;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,6 +25,7 @@ import net.alphadev.ntfslib.api.BlockDevice;
 import net.alphadev.ntfslib.structures.Volume;
 import net.alphadev.ntfslib.structures.attributes.Attribute;
 import net.alphadev.ntfslib.structures.attributes.AttributeType;
+import net.alphadev.ntfslib.util.BitStitching;
 
 public class FileRecord {
     public static final int FILE_SIGNATURE = 0x454c4946;
@@ -33,35 +35,38 @@ public class FileRecord {
     private Volume volume;
     private final long offset;
     private int length;
-    private long attributeOffset;
 
     public FileRecord(Volume volume, long offset) throws IOException {
         this.volume = volume;
         this.offset = offset;
 
-        length = volume.getParameter().getBytesPerMftRecord();
-
-        System.out.println("offset " + offset);
-        System.out.println("length " + length);
-
-        this.attributes = new HashMap<>();
-        ByteBuffer buffer = ByteBuffer.allocate(length);
+        final int size = volume.getParameter().getBytesPerMftRecord();
+        ByteBuffer buffer = ByteBuffer.allocate(size);
+        buffer.order(ByteOrder.LITTLE_ENDIAN);
         volume.read(offset, buffer);
+        buffer.rewind();
 
         int magic = buffer.getInt(0);
-        System.out.println("magic " + magic);
         if(magic != FILE_SIGNATURE) {
             throw new IllegalArgumentException("no magic signature found!");
         }
 
-        this.attributeOffset = offset + 5;
+        this.attributes = new HashMap<>();
+
+        long attributeOffset = offset + 5;
+        while(attributeOffset != 0xff) {
+            parseAttribute(attributeOffset);
+        }
+    }
+
+    public int parseAttribute(long baseAddress) {
+        Attribute attribute = new Attribute();
+        attribute.setFixupOffset();
+        this.attributes.add(attribute);
+        return attribute.getLength();
     }
 
     public Attribute getAttribute(AttributeType attribute) {
-        if(!attributes.containsKey(attribute)) {
-            
-        }
-
         return attributes.get(attribute);
     }
 }
