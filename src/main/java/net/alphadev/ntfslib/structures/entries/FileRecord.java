@@ -41,11 +41,15 @@ public class FileRecord {
 
         length = volume.getParameter().getBytesPerMftRecord();
 
+        System.out.println("offset " + offset);
+        System.out.println("length " + length);
+
         this.attributes = new HashMap<>();
         ByteBuffer buffer = ByteBuffer.allocate(length);
         volume.read(offset, buffer);
 
         int magic = buffer.getInt(0);
+        System.out.println("magic " + magic);
         if(magic != FILE_SIGNATURE) {
             throw new IllegalArgumentException("no magic signature found!");
         }

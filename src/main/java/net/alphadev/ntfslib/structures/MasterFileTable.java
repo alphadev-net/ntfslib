@@ -33,8 +33,8 @@ public class MasterFileTable {
 
     private MasterFileTable(Volume volume, long baseOffset) {
         this.volume = volume;
-        this.baseOffset = baseOffset;
         this.parameter = volume.getParameter();
+        this.baseOffset = parameter.calculateBytes((int) baseOffset);
     }
 
     public static MasterFileTable read(Volume volume) {
@@ -51,11 +51,10 @@ public class MasterFileTable {
     }
 
     public FileRecord getEntry(KnownMftEntries entry) throws IOException {
-        return getEntry(baseOffset + entry.getValue() * parameter.getBytesPerMftRecord());
+        return getEntry(entry.getValue() * parameter.getBytesPerMftRecord());
     }
 
     public FileRecord getEntry(long address) throws IOException {
-        final long beginIndex = baseOffset + address;
-        return new FileRecord(volume, beginIndex);
+        return new FileRecord(volume, baseOffset + address);
     }
 }
