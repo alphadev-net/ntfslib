@@ -39,8 +39,7 @@ public class FileRecord {
         this.volume = volume;
         this.offset = offset;
 
-        length = (int) volume.getEntryAddress(offset);
-        System.out.println(length);
+        length = volume.getParameter().getBytesPerMftRecord();
 
         this.attributes = new HashMap<>();
         ByteBuffer buffer = ByteBuffer.allocate(length);

@@ -27,13 +27,14 @@ import net.alphadev.ntfslib.structures.entries.KnownMftEntries;
  * @author Jan Seeger <jan@alphadev.net>
  */
 public class MasterFileTable {
-    private Volume volume;
-    private VolumeInfo volumeInfo;
-    private long offset;
+    private final Volume volume;
+    private final ExtendedBpb parameter;
+    private final long baseOffset;
 
-    private MasterFileTable(Volume volume, long offset) {
+    private MasterFileTable(Volume volume, long baseOffset) {
         this.volume = volume;
-        this.offset = offset;
+        this.baseOffset = baseOffset;
+        this.parameter = volume.getParameter();
     }
 
     public static MasterFileTable read(Volume volume) {
@@ -50,12 +51,11 @@ public class MasterFileTable {
     }
 
     public FileRecord getEntry(KnownMftEntries entry) throws IOException {
-        long address = offset * entry.getValue();
-        return getEntry(address);
+        return getEntry(baseOffset + entry.getValue() * parameter.getBytesPerMftRecord());
     }
 
     public FileRecord getEntry(long address) throws IOException {
-        final long beginIndex = offset * address;
+        final long beginIndex = baseOffset + address;
         return new FileRecord(volume, beginIndex);
     }
 }

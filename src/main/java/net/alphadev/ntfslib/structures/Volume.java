@@ -81,7 +81,7 @@ public class Volume implements BlockDevice {
 
     public long getEntryAddress(long address) {
         final ExtendedBpb parameter = boot.getBootPartitionParameter();
-        return parameter.getClustersPerMftRecord()
+        return address * parameter.getClustersPerMftRecord()
                 * parameter.getSectorsPerCluster()
                 * parameter.getBytesPerSector();
     }
