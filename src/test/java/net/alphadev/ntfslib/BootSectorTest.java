@@ -50,5 +50,6 @@ public class BootSectorTest {
         Assert.assertEquals(8, bpb.getSectorsPerCluster());
         Assert.assertEquals(1024, bpb.getBytesPerMftRecord());
         Assert.assertEquals(4096, bpb.getBytesPerIndexBuffer());
+        Assert.assertEquals(16384, bpb.calculateBytes((int)bpb.getMftLogicalCluster()));
     }
 }
