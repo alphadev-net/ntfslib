@@ -30,8 +30,8 @@ public class BootSector extends Sector {
      */
     public final static int SIZE = 512;
 
-    private String oemId;
-    private ExtendedBpb pbp;
+    private final String oemId;
+    private final ExtendedBpb pbp;
 
     private BootSector(BlockDevice device) throws IOException {
         super(device, 0, SIZE);
@@ -40,12 +40,12 @@ public class BootSector extends Sector {
     }
 
     public static BootSector read(BlockDevice device) throws IOException {
-        ByteBuffer bb = ByteBuffer.allocate(512);
+        final ByteBuffer bb = ByteBuffer.allocate(2);
         bb.order(ByteOrder.LITTLE_ENDIAN);
-        device.read(0, bb);
+        device.read(510, bb);
 
-        if ((bb.get(510) & 0xff) != 0x55 ||
-                (bb.get(511) & 0xff) != 0xaa) throw new IOException(
+        if ((bb.get(0) & 0xff) != 0x55 ||
+                (bb.get(1) & 0xff) != 0xaa) throw new IOException(
                 "missing boot sector signature");
 
         return new BootSector(device);
