@@ -21,9 +21,10 @@ import net.alphadev.ntfslib.api.BlockDevice;
 import net.alphadev.ntfslib.api.Filesystem;
 import net.alphadev.ntfslib.structures.BootSector;
 import net.alphadev.ntfslib.structures.MasterFileTable;
+import net.alphadev.ntfslib.structures.Volume;
 import net.alphadev.ntfslib.structures.attributes.AttributeType;
 import net.alphadev.ntfslib.structures.attributes.VolumeInfo;
-import net.alphadev.ntfslib.structures.entries.MftEntry;
+import net.alphadev.ntfslib.structures.entries.FileRecord;
 import net.alphadev.ntfslib.structures.entries.KnownMftEntries;
 
 /**
@@ -32,23 +33,22 @@ import net.alphadev.ntfslib.structures.entries.KnownMftEntries;
  * @author Jan Seeger
  */
 public class NtfsFilesystem implements Filesystem {
-    private BlockDevice mDevice;
-    private MasterFileTable mft;
+    private final MasterFileTable mft;
+    private final Volume volume;
     private VolumeInfo volumeInfo;
 
     public NtfsFilesystem(BlockDevice device) throws IOException {
-        mDevice = device;
-
         final BootSector boot = BootSector.read(device);
-        mft = MasterFileTable.read(device, boot);
+        volume = new Volume(device, boot);
+        mft = MasterFileTable.read(volume);
     }
 
     @Override
     public String getVolumeName() {
         if (volumeInfo == null) {
             try {
-                MftEntry entry = mft.getEntry(KnownMftEntries.VOLUME);
-                volumeInfo = (VolumeInfo) entry.getAttribute(AttributeType.VOLUME_NAME);
+                FileRecord volumeFile = mft.getEntry(KnownMftEntries.VOLUME);
+                volumeInfo = (VolumeInfo) volumeFile.getAttribute(AttributeType.VOLUME_NAME);
             } catch (IOException ex) {
                 ex.printStackTrace();
             }

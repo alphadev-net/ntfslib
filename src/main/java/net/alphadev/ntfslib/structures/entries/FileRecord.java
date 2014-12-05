@@ -21,45 +21,44 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.alphadev.ntfslib.api.BlockDevice;
+import net.alphadev.ntfslib.structures.Volume;
 import net.alphadev.ntfslib.structures.attributes.Attribute;
 import net.alphadev.ntfslib.structures.attributes.AttributeType;
 
-public class MftEntry {
+public class FileRecord {
     public static final int FILE_SIGNATURE = 0x454c4946;
     public static final int BAAD_SIGNATURE = 0x44414142;
 
     private Map<AttributeType, ? extends Attribute> attributes;
-    private BlockDevice device;
-    private final long entryOffset;
-    private int clusterSize;
-    private long offset;
+    private Volume volume;
+    private final long offset;
+    private int length;
+    private long attributeOffset;
 
-    public MftEntry(BlockDevice device, long offset, int clusterSize) throws IOException {
-        this.device = device;
-        this.entryOffset = offset;
-        this.clusterSize = clusterSize;
+    public FileRecord(Volume volume, long offset) throws IOException {
+        this.volume = volume;
+        this.offset = offset;
+
+        length = (int) volume.getEntryAddress(offset);
+        System.out.println(length);
+
         this.attributes = new HashMap<>();
-
-        ByteBuffer buffer = ByteBuffer.allocate(clusterSize);
-        device.read(offset, buffer);
+        ByteBuffer buffer = ByteBuffer.allocate(length);
+        volume.read(offset, buffer);
 
         int magic = buffer.getInt(0);
         if(magic != FILE_SIGNATURE) {
             throw new IllegalArgumentException("no magic signature found!");
         }
 
-        this.offset = entryOffset + 5;
+        this.attributeOffset = offset + 5;
     }
 
     public Attribute getAttribute(AttributeType attribute) {
         if(!attributes.containsKey(attribute)) {
-            refreshAttributes();
+            
         }
 
         return attributes.get(attribute);
-    }
-
-    private void refreshAttributes() {
-        
     }
 }

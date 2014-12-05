@@ -18,42 +18,44 @@ package net.alphadev.ntfslib.structures;
 import java.io.IOException;
 
 import net.alphadev.ntfslib.api.BlockDevice;
+import net.alphadev.ntfslib.structures.Volume;
 import net.alphadev.ntfslib.structures.attributes.VolumeInfo;
+import net.alphadev.ntfslib.structures.entries.FileRecord;
 import net.alphadev.ntfslib.structures.entries.KnownMftEntries;
-import net.alphadev.ntfslib.structures.entries.MftEntry;
 
 /**
  * @author Jan Seeger <jan@alphadev.net>
  */
 public class MasterFileTable {
-    private BlockDevice device;
+    private Volume volume;
     private VolumeInfo volumeInfo;
     private long offset;
-    private int clusterSize;
 
-    private MasterFileTable(BlockDevice device, long offset, int clusterSize) {
-        this.device = device;
+    private MasterFileTable(Volume volume, long offset) {
+        this.volume = volume;
         this.offset = offset;
-        this.clusterSize = clusterSize;
     }
 
-    public static MasterFileTable read(BlockDevice device, BootSector boot) {
-        final ExtendedBpb partitionParameter = boot.getBootPartitionParameter();
-        final long mftMainStart = partitionParameter.getMftLogicalCluster();
-        final long mftCopyStart = partitionParameter.getMftMirrorLogicalCluster();
-        final int clusterSize = (int) partitionParameter.getClustersPerMftRecord();
-        final MasterFileTable mainMft = new MasterFileTable(device, mftMainStart, clusterSize);
+    public static MasterFileTable read(Volume volume) {
+        final ExtendedBpb parameter = volume.getParameter();
+        final long mftMainStart = parameter.getMftLogicalCluster();
+        final long mftMirrorStart = parameter.getMftMirrorLogicalCluster();
+        final MasterFileTable mainMft = new MasterFileTable(volume, mftMainStart);
+
+        /*
+         * TODO: check mft integrity here and restore broken entries from mftMirror
+         */
+
         return mainMft;
     }
 
-    public MftEntry getEntry(KnownMftEntries entry) throws IOException {
-        return getEntry(entry.getValue());
+    public FileRecord getEntry(KnownMftEntries entry) throws IOException {
+        long address = offset * entry.getValue();
+        return getEntry(address);
     }
 
-    public MftEntry getEntry(long entryNumber) throws IOException {
-        final long beginIndex = offset * entryNumber;
-        final MftEntry entry = new MftEntry(device, beginIndex, clusterSize);
-
-        return entry;
+    public FileRecord getEntry(long address) throws IOException {
+        final long beginIndex = offset * address;
+        return new FileRecord(volume, beginIndex);
     }
 }

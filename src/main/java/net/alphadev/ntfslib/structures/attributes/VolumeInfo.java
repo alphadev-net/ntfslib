@@ -19,7 +19,7 @@ import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 
 import net.alphadev.ntfslib.api.BlockDevice;
-import net.alphadev.ntfslib.structures.entries.MftEntry;
+import net.alphadev.ntfslib.structures.entries.FileRecord;
 
 public class VolumeInfo extends Attribute {
     private String volumeLabel;

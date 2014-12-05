@@ -29,7 +29,6 @@ public class MountTest {
     private BlockDevice dev;
 
     @Test
-    @Ignore
     public void readVolumeName() throws IOException {
         dev = RamDisk.readGzipped(getClass().getResourceAsStream("ntfs.img.gz"));
         Filesystem ntfs = new NtfsFilesystem(dev);
