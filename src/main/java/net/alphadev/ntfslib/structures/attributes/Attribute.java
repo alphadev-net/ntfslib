@@ -17,15 +17,33 @@ package net.alphadev.ntfslib.structures.attributes;
 
 import java.nio.ByteBuffer;
 
-public abstract class Attribute {
+public final class Attribute {
     public static final long EPOCH_DIFFERENCE = 116444736000000000L;
+
+    private ByteBuffer payload;
+
+    public Attribute(ByteBuffer bb, short offset) {
+        payload = bb;
+    }
 
     /**
      * Converts Microsoft time value to Unix timestamp.
      */
-    protected long parseTimestamp(ByteBuffer bb, int offset) {
+    public static long parseTimestamp(ByteBuffer bb, int offset) {
         long msftTime = bb.getLong(offset);
         long unixTimestamp = msftTime - EPOCH_DIFFERENCE;
         return unixTimestamp/100L;
+    }
+
+    public ByteBuffer getPayload() {
+        return payload;
+    }
+
+    public AttributeType getType() {
+        return null;
+    }
+
+    public short getNextAttribute() {
+        return 0;
     }
 }

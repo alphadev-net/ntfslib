@@ -22,6 +22,7 @@ import net.alphadev.ntfslib.api.Filesystem;
 import net.alphadev.ntfslib.structures.BootSector;
 import net.alphadev.ntfslib.structures.MasterFileTable;
 import net.alphadev.ntfslib.structures.Volume;
+import net.alphadev.ntfslib.structures.attributes.Attribute;
 import net.alphadev.ntfslib.structures.attributes.AttributeType;
 import net.alphadev.ntfslib.structures.attributes.VolumeInfo;
 import net.alphadev.ntfslib.structures.entries.FileRecord;
@@ -48,7 +49,8 @@ public class NtfsFilesystem implements Filesystem {
         if (volumeInfo == null) {
             try {
                 FileRecord volumeFile = mft.getEntry(KnownMftEntries.VOLUME);
-                volumeInfo = (VolumeInfo) volumeFile.getAttribute(AttributeType.VOLUME_NAME);
+                Attribute attr = volumeFile.getAttribute(AttributeType.VOLUME_NAME);
+                volumeInfo = new VolumeInfo(attr);
             } catch (IOException ex) {
                 ex.printStackTrace();
             }

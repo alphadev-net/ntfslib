@@ -20,7 +20,7 @@ import java.util.EnumSet;
 
 import net.alphadev.ntfslib.structures.attributes.FileFlag;
 
-public class Filename extends Attribute {
+public class Filename {
     public static final byte PARENT_DIRECTORY_OFFSET = 0x0;
     public static final byte CREATION_TIME_OFFSET = 0x08;
     public static final byte ALTERATION_TIME_OFFSET = 0x10;
@@ -45,12 +45,13 @@ public class Filename extends Attribute {
     private byte filenameNamespace;
     private String filenameUnicode;
 
-    public Filename(ByteBuffer bb) {
+    public Filename(Attribute attr) {
+        final ByteBuffer bb = attr.getPayload();
         parentDirectory = bb.getLong(PARENT_DIRECTORY_OFFSET);
-        cTime = parseTimestamp(bb, CREATION_TIME_OFFSET);
-        aTime = parseTimestamp(bb, ALTERATION_TIME_OFFSET);
-        mTime = parseTimestamp(bb, MFT_CHANGE_TIME_OFFSET);
-        rTime = parseTimestamp(bb, READ_TIME_OFFSET);
+        cTime = Attribute.parseTimestamp(bb, CREATION_TIME_OFFSET);
+        aTime = Attribute.parseTimestamp(bb, ALTERATION_TIME_OFFSET);
+        mTime = Attribute.parseTimestamp(bb, MFT_CHANGE_TIME_OFFSET);
+        rTime = Attribute.parseTimestamp(bb, READ_TIME_OFFSET);
         allocatedFileSize = bb.getLong(ALLOCATED_SIZE_OFFSET);
         realFileSize = bb.getLong(REAL_SIZE_OFFSET);
         flags = FileFlag.parse(bb.getInt(FLAGS_OFFSET));

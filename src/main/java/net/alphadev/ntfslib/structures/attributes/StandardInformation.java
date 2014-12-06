@@ -17,7 +17,7 @@ package net.alphadev.ntfslib.structures.attributes;
 
 import java.nio.ByteBuffer;
 
-public class StandardInformation extends Attribute {
+public class StandardInformation {
     public static final byte CREATION_TIME_OFFSET = 0x00;
     public static final byte ALTERATION_TIME_OFFSET = 0x08;
     public static final byte MFT_CHANGE_TIME_OFFSET = 0x10;
@@ -44,11 +44,12 @@ public class StandardInformation extends Attribute {
     private int ownerId;
     private int securityId;
 
-    public StandardInformation(ByteBuffer bb) {
-        cTime = parseTimestamp(bb, CREATION_TIME_OFFSET);
-        aTime = parseTimestamp(bb, ALTERATION_TIME_OFFSET);
-        mTime = parseTimestamp(bb, MFT_CHANGE_TIME_OFFSET);
-        rTime = parseTimestamp(bb, READ_TIME_OFFSET);
+    public StandardInformation(Attribute attr) {
+        final ByteBuffer bb = attr.getPayload();
+        cTime = Attribute.parseTimestamp(bb, CREATION_TIME_OFFSET);
+        aTime = Attribute.parseTimestamp(bb, ALTERATION_TIME_OFFSET);
+        mTime = Attribute.parseTimestamp(bb, MFT_CHANGE_TIME_OFFSET);
+        rTime = Attribute.parseTimestamp(bb, READ_TIME_OFFSET);
         dosPermissions = parseDosPermissions(bb, DOS_FILE_PERMISSIONS_OFFSET);
         maxVersions = bb.getInt(MAX_VERSIONS_OFFSET);
         versionNumber = bb.getInt(VERSION_NUMBER_OFFSET);

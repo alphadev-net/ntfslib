@@ -18,12 +18,11 @@ package net.alphadev.ntfslib.structures.entries;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.util.HashMap;
-import java.util.Map;
 
 import net.alphadev.ntfslib.api.BlockDevice;
 import net.alphadev.ntfslib.structures.Volume;
 import net.alphadev.ntfslib.structures.attributes.Attribute;
+import net.alphadev.ntfslib.structures.attributes.AttributeCache;
 import net.alphadev.ntfslib.structures.attributes.AttributeType;
 import net.alphadev.ntfslib.util.BitStitching;
 
@@ -31,39 +30,66 @@ public class FileRecord {
     public static final int FILE_SIGNATURE = 0x454c4946;
     public static final int BAAD_SIGNATURE = 0x44414142;
 
-    private Map<AttributeType, ? extends Attribute> attributes;
-    private Volume volume;
+    public static final short PAYLOAD_OFFSET = 4;
+    public static final short PAYLOAD_LENGTH = 6;
+    public static final short LOG_SEQUENCE_NUMBER = 8;
+    public static final short SEQUENCE_VALUE = 16;
+    public static final short LINK_COUNT = 18;
+    public static final short FIRST_ATTRIBUTE = 20;
+    public static final short FLAGS = 22;
+    public static final short SIZE_USED = 24;
+    public static final short SIZE_ALLOCATED = 28;
+    public static final short BASE_RECORD = 32;
+    public static final short NETX_ATTR = 40;
+
+    private final AttributeCache attributes = new AttributeCache();
+    private final Volume volume;
     private final long offset;
-    private int length;
+
+    private long logFileSequenceNumber;
+    private long baseRecord;
+    private int mftSizeUsed;
+    private int mftSizeAllocated;
+    private short payloadOffset;
+    private short payloadLength;
+    private short sequenceValue;
+    private short linkCount;
+    private short offsetFirstAttribute;
+    private short nextAttribute;
+    private short flags;
 
     public FileRecord(Volume volume, long offset) throws IOException {
         this.volume = volume;
         this.offset = offset;
 
         final int size = volume.getParameter().getBytesPerMftRecord();
-        ByteBuffer buffer = ByteBuffer.allocate(size);
-        buffer.order(ByteOrder.LITTLE_ENDIAN);
-        volume.read(offset, buffer);
-        buffer.rewind();
+        final ByteBuffer bb = ByteBuffer.allocate(size);
+        bb.order(ByteOrder.LITTLE_ENDIAN);
+        volume.read(offset, bb);
+        bb.rewind();
 
-        int magic = buffer.getInt(0);
+        int magic = bb.getInt(0);
         if(magic != FILE_SIGNATURE) {
             throw new IllegalArgumentException("no magic signature found!");
         }
 
-        this.attributes = new HashMap<>();
+        payloadOffset = bb.getShort(PAYLOAD_OFFSET);
+        payloadLength = bb.getShort(PAYLOAD_LENGTH);
+        logFileSequenceNumber = bb.getLong(LOG_SEQUENCE_NUMBER);
+        sequenceValue = bb.getShort(SEQUENCE_VALUE);
+        linkCount = bb.getShort(LINK_COUNT);
+        offsetFirstAttribute = bb.getShort(FIRST_ATTRIBUTE);
+        flags = bb.getShort(FLAGS);
+        mftSizeUsed = bb.getInt(SIZE_USED);
+        mftSizeAllocated = bb.getInt(SIZE_ALLOCATED);
+        baseRecord = bb.getLong(BASE_RECORD);
+        nextAttribute = bb.getShort(NETX_ATTR);
 
-        long attributeOffset = offset + 5;
-        while(attributeOffset != 0xff) {
-            parseAttribute(attributeOffset);
+        while (nextAttribute != 0xff) {
+            final Attribute attribute = new Attribute(bb, nextAttribute);
+            this.attributes.add(attribute);
+            nextAttribute = 0xff;//attribute.getNextAttribute();
         }
-    }
-
-    public int parseAttribute(long baseAddress) {
-        Attribute attribute = new Attribute();
-        attribute.setFixupOffset();
-        this.attributes.add(attribute);
-        return attribute.getLength();
     }
 
     public Attribute getAttribute(AttributeType attribute) {

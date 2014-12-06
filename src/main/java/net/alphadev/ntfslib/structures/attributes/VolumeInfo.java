@@ -21,10 +21,11 @@ import java.nio.ByteBuffer;
 import net.alphadev.ntfslib.api.BlockDevice;
 import net.alphadev.ntfslib.structures.entries.FileRecord;
 
-public class VolumeInfo extends Attribute {
+public class VolumeInfo {
     private String volumeLabel;
 
-    public VolumeInfo(ByteBuffer buffer) {
+    public VolumeInfo(Attribute attr) {
+        final ByteBuffer buffer = attr.getPayload();
         try {
             volumeLabel = new String(buffer.array(), "UTF-8");
         } catch (UnsupportedEncodingException ex) {
