@@ -68,4 +68,14 @@ public enum AttributeType {
     public byte getValue() {
         return value;
     }
+
+    public static AttributeType parse(int value) {
+        for (AttributeType type : AttributeType.values()) {
+            if(value == type.getValue()) {
+                return type;
+            }
+        }
+
+        return null;
+    }
 }

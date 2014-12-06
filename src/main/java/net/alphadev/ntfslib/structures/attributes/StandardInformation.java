@@ -17,6 +17,8 @@ package net.alphadev.ntfslib.structures.attributes;
 
 import java.nio.ByteBuffer;
 
+import net.alphadev.ntfslib.util.AbsoluteDataStream;
+
 public class StandardInformation {
     public static final byte CREATION_TIME_OFFSET = 0x00;
     public static final byte ALTERATION_TIME_OFFSET = 0x08;
@@ -45,7 +47,7 @@ public class StandardInformation {
     private int securityId;
 
     public StandardInformation(Attribute attr) {
-        final ByteBuffer bb = attr.getPayload();
+        final AbsoluteDataStream bb = new AbsoluteDataStream(attr.getPayload());
         cTime = Attribute.parseTimestamp(bb, CREATION_TIME_OFFSET);
         aTime = Attribute.parseTimestamp(bb, ALTERATION_TIME_OFFSET);
         mTime = Attribute.parseTimestamp(bb, MFT_CHANGE_TIME_OFFSET);
@@ -60,7 +62,7 @@ public class StandardInformation {
         updateSequenceNumber = bb.getLong(UPDATE_SEQUENCE_NUMBER_OFFSET);
     }
 
-    private DosPermissions parseDosPermissions(ByteBuffer bb, int offset) {
+    private DosPermissions parseDosPermissions(AbsoluteDataStream bb, int offset) {
         return new DosPermissions();
     }
 

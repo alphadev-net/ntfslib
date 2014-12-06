@@ -15,35 +15,88 @@
  */
 package net.alphadev.ntfslib.structures.attributes;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+
+import net.alphadev.ntfslib.api.StreamProvider;
+import net.alphadev.ntfslib.util.AbsoluteDataStream;
+import net.alphadev.ntfslib.util.BufferUtil;
+import net.alphadev.ntfslib.util.ByteBufferStream;
 
 public final class Attribute {
     public static final long EPOCH_DIFFERENCE = 116444736000000000L;
 
-    private ByteBuffer payload;
+    public static final short TYPE_IDENTIFIER = 0;
+    public static final short ATTRIBUTE_LENGTH = 4;
+    public static final short NON_RESIDENT = 8;
 
-    public Attribute(ByteBuffer bb, short offset) {
+    private ByteBuffer payload;
+    private AttributeType type;
+    private int length;
+    private short flags;
+    private short nameOffset;
+    private short identifier;
+    private byte nonResident;
+    private byte nameLength;
+
+    public Attribute(ByteBuffer bb) {
+        int typeInt = bb.getInt(TYPE_IDENTIFIER);
+        type = AttributeType.parse(typeInt);
+		length = bb.getInt(ATTRIBUTE_LENGTH);
+        nonResident = bb.get(NON_RESIDENT);
+		System.out.println("found " + type);
+
         payload = bb;
     }
 
     /**
      * Converts Microsoft time value to Unix timestamp.
      */
-    public static long parseTimestamp(ByteBuffer bb, int offset) {
+    public static long parseTimestamp(AbsoluteDataStream bb, int offset) {
         long msftTime = bb.getLong(offset);
         long unixTimestamp = msftTime - EPOCH_DIFFERENCE;
         return unixTimestamp/100L;
     }
 
-    public ByteBuffer getPayload() {
-        return payload;
+    public static long parseTimestamp(ByteBuffer bb, int offset) {
+        long msftTime = bb.getLong(offset);
+        long unixTimestamp = msftTime - EPOCH_DIFFERENCE;
+        return unixTimestamp/100L;
+    }
+    
+    public StreamProvider getPayload() {
+        return new StreamProvider() {
+            @Override
+            public InputStream getStream() {
+                if (payload.hasArray()) {
+                    // use heap buffer; no array is created; only the reference is used
+                    return new ByteArrayInputStream(payload.array());
+                }
+
+                return new ByteBufferStream(payload);
+            }
+        };
     }
 
     public AttributeType getType() {
-        return null;
+        return type;
     }
 
-    public short getNextAttribute() {
-        return 0;
+    public int getLength() {
+        return this.length;
+    }
+
+    public boolean isResident() {
+        return nonResident == 0;
+    }
+
+    public byte getNameLength() {
+        return nameLength;
+    }
+
+    public short getNameOffset() {
+        return nameOffset;
     }
 }

@@ -16,20 +16,28 @@
 package net.alphadev.ntfslib.structures.attributes;
 
 import java.io.UnsupportedEncodingException;
-import java.nio.ByteBuffer;
 
 import net.alphadev.ntfslib.api.BlockDevice;
 import net.alphadev.ntfslib.structures.entries.FileRecord;
+import net.alphadev.ntfslib.util.AbsoluteDataStream;
 
 public class VolumeInfo {
     private String volumeLabel;
 
     public VolumeInfo(Attribute attr) {
-        final ByteBuffer buffer = attr.getPayload();
+        final AbsoluteDataStream buffer = new AbsoluteDataStream(attr.getPayload());
+
+        int length = attr.getNameLength();
+        int offset = attr.getNameOffset();
+        byte[] name = new byte[length];
+        for (int i = 0; i < length; i++) {
+            name[i] = buffer.getByte(offset + 1);
+        }
+
         try {
-            volumeLabel = new String(buffer.array(), "UTF-8");
+            volumeLabel = new String(name, "UTF-16LE");
         } catch (UnsupportedEncodingException ex) {
-            // utf8 unsupported?!
+             throw new IllegalStateException("UTF-16LE charset missing", ex);
         }
     }
 

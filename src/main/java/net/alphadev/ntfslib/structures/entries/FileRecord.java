@@ -25,10 +25,12 @@ import net.alphadev.ntfslib.structures.attributes.Attribute;
 import net.alphadev.ntfslib.structures.attributes.AttributeCache;
 import net.alphadev.ntfslib.structures.attributes.AttributeType;
 import net.alphadev.ntfslib.util.BitStitching;
+import net.alphadev.ntfslib.util.BufferUtil;
 
 public class FileRecord {
     public static final int FILE_SIGNATURE = 0x454c4946;
     public static final int BAAD_SIGNATURE = 0x44414142;
+    public static final int END_OF_ATTRIBUTES = 0xffffffff;
 
     public static final short PAYLOAD_OFFSET = 4;
     public static final short PAYLOAD_LENGTH = 6;
@@ -55,7 +57,7 @@ public class FileRecord {
     private short sequenceValue;
     private short linkCount;
     private short offsetFirstAttribute;
-    private short nextAttribute;
+    private int nextAttribute;
     private short flags;
 
     public FileRecord(Volume volume, long offset) throws IOException {
@@ -85,10 +87,12 @@ public class FileRecord {
         baseRecord = bb.getLong(BASE_RECORD);
         nextAttribute = bb.getShort(NETX_ATTR);
 
-        while (nextAttribute != 0xff) {
-            final Attribute attribute = new Attribute(bb, nextAttribute);
+        nextAttribute = offsetFirstAttribute;
+        while (bb.getInt(nextAttribute) != END_OF_ATTRIBUTES) {
+            final ByteBuffer inner = BufferUtil.copy(bb, nextAttribute);
+            final Attribute attribute = new Attribute(inner);
             this.attributes.add(attribute);
-            nextAttribute = 0xff;//attribute.getNextAttribute();
+            nextAttribute += attribute.getLength();
         }
     }
 

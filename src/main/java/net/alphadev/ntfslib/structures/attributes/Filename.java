@@ -15,9 +15,10 @@
  */
 package net.alphadev.ntfslib.structures.attributes;
 
-import java.nio.ByteBuffer;
+import java.io.DataInputStream;
 import java.util.EnumSet;
 
+import net.alphadev.ntfslib.util.AbsoluteDataStream;
 import net.alphadev.ntfslib.structures.attributes.FileFlag;
 
 public class Filename {
@@ -46,7 +47,7 @@ public class Filename {
     private String filenameUnicode;
 
     public Filename(Attribute attr) {
-        final ByteBuffer bb = attr.getPayload();
+        final AbsoluteDataStream bb = new AbsoluteDataStream(attr.getPayload());
         parentDirectory = bb.getLong(PARENT_DIRECTORY_OFFSET);
         cTime = Attribute.parseTimestamp(bb, CREATION_TIME_OFFSET);
         aTime = Attribute.parseTimestamp(bb, ALTERATION_TIME_OFFSET);
