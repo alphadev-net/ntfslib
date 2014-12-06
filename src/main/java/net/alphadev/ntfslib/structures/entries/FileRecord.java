@@ -32,6 +32,7 @@ public class FileRecord {
     public static final int BAAD_SIGNATURE = 0x44414142;
     public static final int END_OF_ATTRIBUTES = 0xffffffff;
 
+    public static final short SIGNATURE_OFFSET = 0;
     public static final short PAYLOAD_OFFSET = 4;
     public static final short PAYLOAD_LENGTH = 6;
     public static final short LOG_SEQUENCE_NUMBER = 8;
@@ -70,7 +71,7 @@ public class FileRecord {
         volume.read(offset, bb);
         bb.rewind();
 
-        int magic = bb.getInt(0);
+        int magic = bb.getInt(SIGNATURE_OFFSET);
         if(magic != FILE_SIGNATURE) {
             throw new IllegalArgumentException("no magic signature found!");
         }
