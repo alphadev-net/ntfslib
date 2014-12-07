@@ -39,23 +39,22 @@ public enum AttributeType {
     @Deprecated
     VOLUME_VERSION(0x40);
 
-    private byte value;
+    private short value;
 
     AttributeType(int value) {
-        this.value = (byte) value;
+        this.value = (short) value;
     }
 
-    public byte getValue() {
+    public short getValue() {
         return value;
     }
 
     public static AttributeType parse(int value) {
         for (AttributeType type : AttributeType.values()) {
-            if(value == type.getValue()) {
+            if((value & 0xffff) == type.getValue()) {
                 return type;
             }
         }
-
-        return null;
+        throw new IllegalArgumentException("Could not find attribute type (" + value + ")");
     }
 }
