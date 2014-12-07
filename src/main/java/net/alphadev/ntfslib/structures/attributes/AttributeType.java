@@ -16,53 +16,33 @@
 package net.alphadev.ntfslib.structures.attributes;
 
 public enum AttributeType {
-    STANDARD_INFORMATION((byte) 0x10),
-    ATTRIBUTE_LIST((byte) 0x20),
-    FILE_NAME((byte) 0x30),
+    STANDARD_INFORMATION(0x10),
+    ATTRIBUTE_LIST(0x20),
+    FILE_NAME(0x30),
+    OBJECT_ID(0x40),
+    SECURITY_DESCRIPTOR(0x50),
+    VOLUME_NAME(0x60),
+    VOLUME_INFORMATION(0x70),
+    DATA(0x80),
+    INDEX_ROOT(0x90),
+    INDEX_ALLOCATION(0xa0),
+    BITMAP(0xb0),
+    REPARSE_POINT(0xc0),
+    EA_INFORMATION(0xd0),
+    EA(0xe0),
+    LOGGED_UTILITY_STREAM(0x100),
 
-    /**
-     * WinNt
-     */
-    VOLUME_VERSION((byte) 0x40),
-
-    /**
-     * Win2k
-     */
-    OBJECT_ID((byte) 0x40),
-    SECURITY_DESCRIPTOR((byte) 0x50),
-    VOLUME_NAME((byte) 0x60),
-    VOLUME_INFORMATION((byte) 0x70),
-    DATA((byte) 0x80),
-    INDEX_ROOT((byte) 0x90),
-    INDEX_ALLOCATION((byte) 0xa0),
-    BITMAP((byte) 0xb0),
-
-    /**
-     * WinNt
-     */
-    SYMBOLIC_LINK((byte) 0xc0),
-
-    /**
-     * Win2k
-     */
-    REPARSE_POINT((byte) 0xc0),
-    EA_INFORMATION((byte) 0xd0),
-    EA((byte) 0xe0),
-
-    /**
-     * WinNt
-     */
-    PROPERTY_SET((byte) 0xf0),
-
-    /**
-     * Win2k
-     */
-    LOGGED_UTILITY_STREAM((byte) 0x100);
+    @Deprecated
+    SYMBOLIC_LINK(0xc0),
+    @Deprecated
+    PROPERTY_SET(0xf0),
+    @Deprecated
+    VOLUME_VERSION(0x40);
 
     private byte value;
 
-    AttributeType(byte value) {
-        this.value = value;
+    AttributeType(int value) {
+        this.value = (byte) value;
     }
 
     public byte getValue() {
