@@ -33,7 +33,6 @@ public class MountTest {
         dev = RamDisk.readGzipped(getClass().getResourceAsStream("ntfs.img.gz"));
         Filesystem ntfs = new NtfsFilesystem(dev);
         String label = ntfs.getVolumeName();
-        System.out.println(label);
         Assert.assertEquals("Bla", label);
     }
 }
