@@ -18,12 +18,11 @@
  */
 package net.alphadev.ntfslib.structures;
 
+import net.alphadev.ntfslib.api.BlockDevice;
+import net.alphadev.ntfslib.structures.attributes.VolumeInfo;
+
 import java.io.IOException;
 import java.nio.ByteBuffer;
-
-import net.alphadev.ntfslib.api.BlockDevice;
-import net.alphadev.ntfslib.structures.BootSector;
-import net.alphadev.ntfslib.structures.attributes.VolumeInfo;
 
 public class Volume implements BlockDevice {
     private BlockDevice device;

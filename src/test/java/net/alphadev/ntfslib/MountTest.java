@@ -15,15 +15,13 @@
  */
 package net.alphadev.ntfslib;
 
-import java.io.IOException;
-
 import net.alphadev.ntfslib.api.BlockDevice;
 import net.alphadev.ntfslib.api.Filesystem;
 import net.alphadev.ntfslib.util.RamDisk;
-
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
+
+import java.io.IOException;
 
 public class MountTest {
     private BlockDevice dev;

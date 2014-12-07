@@ -18,27 +18,24 @@
  */
 package net.alphadev.ntfslib.structures;
 
+import net.alphadev.ntfslib.api.BlockDevice;
+
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-import net.alphadev.ntfslib.api.BlockDevice;
-
 /**
- * 
  * @author Matthias Treydte &lt;waldheinz at gmail.com&gt;
  */
 public abstract class Sector {
-    private final BlockDevice device;
-    private final long offset;
-
     /**
      * The buffer holding the contents of this {@code Sector}.
      */
     protected final ByteBuffer buffer;
-
+    private final BlockDevice device;
+    private final long offset;
     private boolean dirty;
-    
+
     protected Sector(BlockDevice device, long offset, int size) throws IOException {
         this.offset = offset;
         this.device = device;
@@ -47,13 +44,13 @@ public abstract class Sector {
         read();
         this.dirty = true;
     }
-    
+
     /**
      * Reads the contents of this {@code Sector} from the device into the
      * internal buffer and resets the "dirty" state.
      *
      * @throws IOException on read error
-     * @see #isDirty() 
+     * @see #isDirty()
      */
     protected void read() throws IOException {
         buffer.rewind();
@@ -62,11 +59,11 @@ public abstract class Sector {
         buffer.rewind();
         this.dirty = false;
     }
-    
+
     public final boolean isDirty() {
         return this.dirty;
     }
-    
+
     protected final void markDirty() {
         this.dirty = true;
     }
@@ -82,7 +79,7 @@ public abstract class Sector {
 
     public final void write() throws IOException {
         if (!isDirty()) return;
-        
+
         buffer.position(0);
         buffer.limit(buffer.capacity());
         device.write(offset, buffer);
@@ -96,18 +93,18 @@ public abstract class Sector {
     protected long get32(int offset) {
         return buffer.getInt(offset);
     }
-    
+
     protected int get8(int offset) {
         return buffer.get(offset) & 0xff;
     }
-    
+
     protected void set16(int offset, int value) {
         buffer.putShort(offset, (short) (value & 0xffff));
         dirty = true;
     }
 
     protected void set32(int offset, long value) {
-        buffer.putInt(offset, (int) (value & 0xffffffff));
+        buffer.putInt(offset, (int) value);
         dirty = true;
     }
 
@@ -116,13 +113,13 @@ public abstract class Sector {
             throw new IllegalArgumentException(
                     value + " too big to be stored in a single octet");
         }
-        
+
         buffer.put(offset, (byte) (value & 0xff));
         dirty = true;
     }
 
     protected long get64(int offset) {
-        return buffer.getLong(offset);        
+        return buffer.getLong(offset);
     }
 
     /**
@@ -136,7 +133,7 @@ public abstract class Sector {
 
     protected String getString(int offset, int length) {
         byte[] values = new byte[length];
-        for(int i = 0; i < length; i++) {
+        for (int i = 0; i < length; i++) {
             values[i] = (byte) get8(offset + i);
         }
         return new String(values);

@@ -45,16 +45,16 @@ public enum AttributeType {
         this.value = (short) value;
     }
 
-    public short getValue() {
-        return value;
-    }
-
     public static AttributeType parse(int value) {
         for (AttributeType type : AttributeType.values()) {
-            if((value & 0xffff) == type.getValue()) {
+            if ((value & 0xffff) == type.getValue()) {
                 return type;
             }
         }
         throw new IllegalArgumentException("Could not find attribute type (" + value + ")");
+    }
+
+    public short getValue() {
+        return value;
     }
 }

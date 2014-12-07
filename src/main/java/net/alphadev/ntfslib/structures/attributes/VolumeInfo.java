@@ -15,15 +15,10 @@
  */
 package net.alphadev.ntfslib.structures.attributes;
 
-import net.alphadev.ntfslib.api.BlockDevice;
-import net.alphadev.ntfslib.structures.entries.FileRecord;
-import net.alphadev.ntfslib.util.AbsoluteDataStream;
-
 public class VolumeInfo {
     private String volumeLabel;
 
     public VolumeInfo(Attribute attr) {
-        final AbsoluteDataStream buffer = new AbsoluteDataStream(attr.getPayload());
         volumeLabel = attr.getPayloadAsString();
     }
 

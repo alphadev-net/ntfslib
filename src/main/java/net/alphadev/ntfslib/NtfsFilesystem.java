@@ -15,8 +15,6 @@
  */
 package net.alphadev.ntfslib;
 
-import java.io.IOException;
-
 import net.alphadev.ntfslib.api.BlockDevice;
 import net.alphadev.ntfslib.api.Filesystem;
 import net.alphadev.ntfslib.structures.BootSector;
@@ -28,9 +26,11 @@ import net.alphadev.ntfslib.structures.attributes.VolumeInfo;
 import net.alphadev.ntfslib.structures.entries.FileRecord;
 import net.alphadev.ntfslib.structures.entries.KnownMftEntries;
 
+import java.io.IOException;
+
 /**
  * NTFS Filesystem.
- * 
+ *
  * @author Jan Seeger
  */
 public class NtfsFilesystem implements Filesystem {

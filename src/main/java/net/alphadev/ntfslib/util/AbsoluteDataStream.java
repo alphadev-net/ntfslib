@@ -1,10 +1,9 @@
 package net.alphadev.ntfslib.util;
 
-import java.io.DataInputStream;
-import java.io.InputStream;
-import java.io.IOException;
-
 import net.alphadev.ntfslib.api.StreamProvider;
+
+import java.io.DataInputStream;
+import java.io.IOException;
 
 public class AbsoluteDataStream {
     private final StreamProvider provider;
@@ -57,7 +56,7 @@ public class AbsoluteDataStream {
     }
 
     private void checkPosition(int pos) throws IOException {
-        if(pos < current) {
+        if (pos < current) {
             input.close();
             input = new DataInputStream(provider.getStream());
         }

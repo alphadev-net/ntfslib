@@ -21,10 +21,16 @@ import java.nio.ByteBuffer;
 
 public interface BlockDevice extends Closeable {
     long getSize();
+
     void read(long devOffset, ByteBuffer dest) throws IOException;
+
     void write(long devOffset, ByteBuffer src) throws IOException;
+
     void flush() throws IOException;
+
     int getSectorSize();
+
     boolean isClosed();
+
     boolean isReadOnly();
 }

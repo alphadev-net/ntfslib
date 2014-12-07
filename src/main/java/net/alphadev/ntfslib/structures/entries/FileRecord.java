@@ -15,17 +15,15 @@
  */
 package net.alphadev.ntfslib.structures.entries;
 
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-
-import net.alphadev.ntfslib.api.BlockDevice;
 import net.alphadev.ntfslib.structures.Volume;
 import net.alphadev.ntfslib.structures.attributes.Attribute;
 import net.alphadev.ntfslib.structures.attributes.AttributeCache;
 import net.alphadev.ntfslib.structures.attributes.AttributeType;
-import net.alphadev.ntfslib.util.BitStitching;
 import net.alphadev.ntfslib.util.BufferUtil;
+
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 
 public class FileRecord {
     public static final int FILE_SIGNATURE = 0x454c4946;
@@ -72,7 +70,7 @@ public class FileRecord {
         bb.rewind();
 
         int magic = bb.getInt(SIGNATURE_OFFSET);
-        if(magic != FILE_SIGNATURE) {
+        if (magic != FILE_SIGNATURE) {
             throw new IllegalArgumentException("no magic signature found!");
         }
 

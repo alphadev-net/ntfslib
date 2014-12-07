@@ -15,11 +15,9 @@
  */
 package net.alphadev.ntfslib.structures.attributes;
 
-import java.io.DataInputStream;
-import java.util.EnumSet;
-
 import net.alphadev.ntfslib.util.AbsoluteDataStream;
-import net.alphadev.ntfslib.structures.attributes.FileFlag;
+
+import java.util.EnumSet;
 
 public class Filename {
     public static final byte PARENT_DIRECTORY_OFFSET = 0x0;

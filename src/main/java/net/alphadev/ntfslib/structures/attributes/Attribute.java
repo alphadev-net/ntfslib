@@ -15,16 +15,14 @@
  */
 package net.alphadev.ntfslib.structures.attributes;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-
 import net.alphadev.ntfslib.api.StreamProvider;
 import net.alphadev.ntfslib.util.AbsoluteDataStream;
 import net.alphadev.ntfslib.util.BufferUtil;
 import net.alphadev.ntfslib.util.ByteBufferStream;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
 
 public final class Attribute {
     public static final long EPOCH_DIFFERENCE = 116444736000000000L;
@@ -52,12 +50,12 @@ public final class Attribute {
     public Attribute(ByteBuffer bb) {
         int typeInt = bb.getInt(TYPE_IDENTIFIER);
         type = AttributeType.parse(typeInt);
-		length = bb.getInt(ATTRIBUTE_LENGTH);
+        length = bb.getInt(ATTRIBUTE_LENGTH);
         nonResident = bb.get(NON_RESIDENT);
 
         byte nameLength = bb.get(NAME_LENGTH);
         short nameOffset = bb.getShort(NAME_OFFSET);
-        if(nameLength != 0) {
+        if (nameLength != 0) {
             attributeName = readString(bb, nameOffset, nameLength);
         }
 
@@ -76,13 +74,22 @@ public final class Attribute {
     public static long parseTimestamp(AbsoluteDataStream bb, int offset) {
         long msftTime = bb.getLong(offset);
         long unixTimestamp = msftTime - EPOCH_DIFFERENCE;
-        return unixTimestamp/100L;
+        return unixTimestamp / 100L;
     }
 
     public static long parseTimestamp(ByteBuffer bb, int offset) {
         long msftTime = bb.getLong(offset);
         long unixTimestamp = msftTime - EPOCH_DIFFERENCE;
-        return unixTimestamp/100L;
+        return unixTimestamp / 100L;
+    }
+
+    public static String readString(ByteBuffer buffer, short offset, int length) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < length; i += 2) {
+            sb.append(buffer.getChar(i + offset));
+        }
+
+        return sb.toString();
     }
 
     public StreamProvider getPayload() {
@@ -115,16 +122,7 @@ public final class Attribute {
         return attributeName;
     }
 
-    public static String readString(ByteBuffer buffer, short offset, int length) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < length; i+=2) {
-            sb.append(buffer.getChar(i + offset));
-        }
-
-        return sb.toString();
-    }
-
     public String getPayloadAsString() {
-        return readString(payload, (short)0, payloadLength);
+        return readString(payload, (short) 0, payloadLength);
     }
 }

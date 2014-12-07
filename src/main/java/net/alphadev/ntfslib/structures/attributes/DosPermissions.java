@@ -16,5 +16,5 @@
 package net.alphadev.ntfslib.structures.attributes;
 
 public class DosPermissions {
-    
+
 }

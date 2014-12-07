@@ -15,18 +15,15 @@
  */
 package net.alphadev.ntfslib;
 
-import java.io.IOException;
-
 import net.alphadev.ntfslib.api.BlockDevice;
-import net.alphadev.ntfslib.api.Filesystem;
 import net.alphadev.ntfslib.structures.BootSector;
 import net.alphadev.ntfslib.structures.ExtendedBpb;
 import net.alphadev.ntfslib.util.RamDisk;
-
 import org.junit.Assert;
-import org.junit.Test;
 import org.junit.Before;
-import org.junit.Ignore;
+import org.junit.Test;
+
+import java.io.IOException;
 
 public class BootSectorTest {
     private BlockDevice dev;
@@ -50,6 +47,6 @@ public class BootSectorTest {
         Assert.assertEquals(8, bpb.getSectorsPerCluster());
         Assert.assertEquals(1024, bpb.getBytesPerMftRecord());
         Assert.assertEquals(4096, bpb.getBytesPerIndexBuffer());
-        Assert.assertEquals(16384, bpb.calculateBytes((int)bpb.getMftLogicalCluster()));
+        Assert.assertEquals(16384, bpb.calculateBytes((int) bpb.getMftLogicalCluster()));
     }
 }

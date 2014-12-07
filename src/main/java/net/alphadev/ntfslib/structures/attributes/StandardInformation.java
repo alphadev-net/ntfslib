@@ -15,8 +15,6 @@
  */
 package net.alphadev.ntfslib.structures.attributes;
 
-import java.nio.ByteBuffer;
-
 import net.alphadev.ntfslib.util.AbsoluteDataStream;
 
 public class StandardInformation {

@@ -41,19 +41,19 @@ public enum FileFlag {
         this.value = value;
     }
 
-    public int get() {
-        return value;
-    }
-
     public static EnumSet<FileFlag> parse(int value) {
         ArrayList<FileFlag> retval = new ArrayList<>();
 
-        for (FileFlag flag: FileFlag.values()) {
+        for (FileFlag flag : FileFlag.values()) {
             if ((value & flag.get()) == flag.get()) {
                 retval.add(flag);
             }
         }
 
         return EnumSet.copyOf(retval);
+    }
+
+    public int get() {
+        return value;
     }
 }
