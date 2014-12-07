@@ -23,7 +23,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-public class MountTest {
+public class VolumeNameTest {
     private BlockDevice dev;
 
     @Test
