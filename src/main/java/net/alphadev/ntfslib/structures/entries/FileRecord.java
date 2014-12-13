@@ -15,9 +15,9 @@
  */
 package net.alphadev.ntfslib.structures.entries;
 
+import net.alphadev.ntfslib.structures.AttributeCache;
 import net.alphadev.ntfslib.structures.Volume;
 import net.alphadev.ntfslib.structures.attributes.Attribute;
-import net.alphadev.ntfslib.structures.AttributeCache;
 import net.alphadev.ntfslib.structures.attributes.AttributeType;
 import net.alphadev.ntfslib.util.BufferUtil;
 

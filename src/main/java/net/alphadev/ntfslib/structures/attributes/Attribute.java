@@ -30,12 +30,8 @@
  */
 package net.alphadev.ntfslib.structures.attributes;
 
-import net.alphadev.ntfslib.api.StreamProvider;
 import net.alphadev.ntfslib.util.BufferUtil;
-import net.alphadev.ntfslib.util.ByteBufferStream;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.nio.ByteBuffer;
 
 public class Attribute {
@@ -94,21 +90,6 @@ public class Attribute {
 
     protected final short getAttributeNameOffset() {
         return attributeData.getShort(NAME_OFFSET);
-    }
-
-    public StreamProvider getPayload() {
-        final ByteBuffer payload = getPayloadBuffer();
-        return new StreamProvider() {
-            @Override
-            public InputStream getStream() {
-                if (payload.hasArray()) {
-                    // use heap buffer; no array is created; only the reference is used
-                    return new ByteArrayInputStream(payload.array());
-                }
-
-                return new ByteBufferStream(payload);
-            }
-        };
     }
 
     public AttributeType getType() {
