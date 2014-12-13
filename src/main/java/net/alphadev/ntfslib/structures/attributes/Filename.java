@@ -21,18 +21,18 @@ import java.nio.ByteBuffer;
 import java.util.EnumSet;
 
 public class Filename extends Attribute {
-    public static final byte PARENT_DIRECTORY_OFFSET = 0x0;
-    public static final byte CREATION_TIME_OFFSET = 0x08;
-    public static final byte ALTERATION_TIME_OFFSET = 0x10;
-    public static final byte MFT_CHANGE_TIME_OFFSET = 0x18;
-    public static final byte READ_TIME_OFFSET = 0x20;
-    public static final byte ALLOCATED_SIZE_OFFSET = 0x28;
-    public static final byte REAL_SIZE_OFFSET = 0x30;
-    public static final byte FLAGS_OFFSET = 0x38;
-    public static final byte EA_REPARSE_OFFSET = 0x3c;
-    public static final byte FILENAME_LENGTH_CHARACTER = 0x40;
-    public static final byte FILENAME_NAMESPACE = 0x41;
-    public static final byte FILENAME_OFFSET = 0x42;
+    private static final byte PARENT_DIRECTORY_OFFSET = 0x0;
+    private static final byte CREATION_TIME_OFFSET = 0x08;
+    private static final byte ALTERATION_TIME_OFFSET = 0x10;
+    private static final byte MFT_CHANGE_TIME_OFFSET = 0x18;
+    private static final byte READ_TIME_OFFSET = 0x20;
+    private static final byte ALLOCATED_SIZE_OFFSET = 0x28;
+    private static final byte REAL_SIZE_OFFSET = 0x30;
+    private static final byte FLAGS_OFFSET = 0x38;
+    private static final byte EA_REPARSE_OFFSET = 0x3c;
+    private static final byte FILENAME_LENGTH_CHARACTER = 0x40;
+    private static final byte FILENAME_NAMESPACE = 0x41;
+    private static final byte FILENAME_OFFSET = 0x42;
 
     private ByteBuffer bb;
 

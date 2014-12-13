@@ -20,18 +20,18 @@ import net.alphadev.ntfslib.util.TimeConversionUtil;
 import java.nio.ByteBuffer;
 
 public class StandardInformation extends Attribute {
-    public static final byte CREATION_TIME_OFFSET = 0x00;
-    public static final byte ALTERATION_TIME_OFFSET = 0x08;
-    public static final byte MFT_CHANGE_TIME_OFFSET = 0x10;
-    public static final byte READ_TIME_OFFSET = 0x18;
-    public static final byte DOS_FILE_PERMISSIONS_OFFSET = 0x20;
-    public static final byte MAX_VERSIONS_OFFSET = 0x24;
-    public static final byte VERSION_NUMBER_OFFSET = 0x28;
-    public static final byte CLASS_ID_OFFSET = 0x2c;
-    public static final byte OWNER_ID_OFFSET = 0x30;
-    public static final byte SECURITY_ID_OFFSET = 0x34;
-    public static final byte QUOTA_CHARGED_OFFSET = 0x38;
-    public static final byte UPDATE_SEQUENCE_NUMBER_OFFSET = 0x40;
+    private static final byte CREATION_TIME_OFFSET = 0x00;
+    private static final byte ALTERATION_TIME_OFFSET = 0x08;
+    private static final byte MFT_CHANGE_TIME_OFFSET = 0x10;
+    private static final byte READ_TIME_OFFSET = 0x18;
+    private static final byte DOS_FILE_PERMISSIONS_OFFSET = 0x20;
+    private static final byte MAX_VERSIONS_OFFSET = 0x24;
+    private static final byte VERSION_NUMBER_OFFSET = 0x28;
+    private static final byte CLASS_ID_OFFSET = 0x2c;
+    private static final byte OWNER_ID_OFFSET = 0x30;
+    private static final byte SECURITY_ID_OFFSET = 0x34;
+    private static final byte QUOTA_CHARGED_OFFSET = 0x38;
+    private static final byte UPDATE_SEQUENCE_NUMBER_OFFSET = 0x40;
 
     private ByteBuffer bb;
 
