@@ -15,10 +15,10 @@
  */
 package net.alphadev.ntfslib.structures.attributes;
 
-public class VolumeInfo {
+public class VolumeName {
     private String volumeLabel;
 
-    public VolumeInfo(Attribute attr) {
+    public VolumeName(Attribute attr) {
         volumeLabel = attr.getPayloadAsString();
     }
 
