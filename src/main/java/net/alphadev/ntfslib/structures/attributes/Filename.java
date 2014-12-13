@@ -16,6 +16,7 @@
 package net.alphadev.ntfslib.structures.attributes;
 
 import net.alphadev.ntfslib.util.AbsoluteDataStream;
+import net.alphadev.ntfslib.util.TimeConversionUtil;
 
 import java.util.EnumSet;
 
@@ -47,10 +48,10 @@ public class Filename {
     public Filename(Attribute attr) {
         final AbsoluteDataStream bb = new AbsoluteDataStream(attr.getPayload());
         parentDirectory = bb.getLong(PARENT_DIRECTORY_OFFSET);
-        cTime = Attribute.parseTimestamp(bb, CREATION_TIME_OFFSET);
-        aTime = Attribute.parseTimestamp(bb, ALTERATION_TIME_OFFSET);
-        mTime = Attribute.parseTimestamp(bb, MFT_CHANGE_TIME_OFFSET);
-        rTime = Attribute.parseTimestamp(bb, READ_TIME_OFFSET);
+        cTime = TimeConversionUtil.parseTimestamp(bb, CREATION_TIME_OFFSET);
+        aTime = TimeConversionUtil.parseTimestamp(bb, ALTERATION_TIME_OFFSET);
+        mTime = TimeConversionUtil.parseTimestamp(bb, MFT_CHANGE_TIME_OFFSET);
+        rTime = TimeConversionUtil.parseTimestamp(bb, READ_TIME_OFFSET);
         allocatedFileSize = bb.getLong(ALLOCATED_SIZE_OFFSET);
         realFileSize = bb.getLong(REAL_SIZE_OFFSET);
         flags = FileFlag.parse(bb.getInt(FLAGS_OFFSET));

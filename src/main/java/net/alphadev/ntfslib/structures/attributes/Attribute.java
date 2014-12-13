@@ -16,7 +16,6 @@
 package net.alphadev.ntfslib.structures.attributes;
 
 import net.alphadev.ntfslib.api.StreamProvider;
-import net.alphadev.ntfslib.util.AbsoluteDataStream;
 import net.alphadev.ntfslib.util.BufferUtil;
 import net.alphadev.ntfslib.util.ByteBufferStream;
 
@@ -24,63 +23,21 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 
-public final class Attribute {
-    public static final long EPOCH_DIFFERENCE = 116444736000000000L;
+public class Attribute {
+    private static final short TYPE_IDENTIFIER = 0x00;
+    private static final short ATTRIBUTE_LENGTH = 0x04;
+    private static final short NON_RESIDENT = 0x08;
+    private static final short NAME_LENGTH = 0x09;
+    private static final short NAME_OFFSET = 0x0a;
+    private static final short FLAGS = 0x0c;
+    private static final short IDENTIFIER = 0x0e;
+    private static final short PAYLOAD_LENGTH = 0x10;
+    private static final short PAYLOAD_OFFSET = 0x14;
 
-    public static final short TYPE_IDENTIFIER = 0x00;
-    public static final short ATTRIBUTE_LENGTH = 0x04;
-    public static final short NON_RESIDENT = 0x08;
-    public static final short NAME_LENGTH = 0x09;
-    public static final short NAME_OFFSET = 0x0a;
-    public static final short FLAGS = 0x0c;
-    public static final short IDENTIFIER = 0x0e;
-    public static final short PAYLOAD_LENGTH = 0x10;
-    public static final short PAYLOAD_OFFSET = 0x14;
+    private ByteBuffer attributeData;
 
-    private ByteBuffer payload;
-    private AttributeType type;
-    private String attributeName;
-    private int length;
-    private int payloadLength;
-    private short payloadOffset;
-    private short flags;
-    private short identifier;
-    private byte nonResident;
-
-    public Attribute(ByteBuffer bb) {
-        int typeInt = bb.getInt(TYPE_IDENTIFIER);
-        type = AttributeType.parse(typeInt);
-        length = bb.getInt(ATTRIBUTE_LENGTH);
-        nonResident = bb.get(NON_RESIDENT);
-
-        byte nameLength = bb.get(NAME_LENGTH);
-        short nameOffset = bb.getShort(NAME_OFFSET);
-        if (nameLength != 0) {
-            attributeName = readString(bb, nameOffset, nameLength);
-        }
-
-        flags = bb.getShort(FLAGS);
-        identifier = bb.getShort(IDENTIFIER);
-
-        payloadLength = bb.getInt(PAYLOAD_LENGTH);
-        payloadOffset = (short) (bb.getShort(PAYLOAD_OFFSET) + 2 * nameLength);
-        final int payloadEnd = payloadOffset + payloadLength;
-        payload = BufferUtil.copy(bb, payloadOffset, payloadEnd);
-    }
-
-    /**
-     * Converts Microsoft time value to Unix timestamp.
-     */
-    public static long parseTimestamp(AbsoluteDataStream bb, int offset) {
-        long msftTime = bb.getLong(offset);
-        long unixTimestamp = msftTime - EPOCH_DIFFERENCE;
-        return unixTimestamp / 100L;
-    }
-
-    public static long parseTimestamp(ByteBuffer bb, int offset) {
-        long msftTime = bb.getLong(offset);
-        long unixTimestamp = msftTime - EPOCH_DIFFERENCE;
-        return unixTimestamp / 100L;
+    public Attribute(ByteBuffer attributeData) {
+        this.attributeData = attributeData;
     }
 
     public static String readString(ByteBuffer buffer, short offset, int length) {
@@ -92,7 +49,40 @@ public final class Attribute {
         return sb.toString();
     }
 
+    public static Attribute create(ByteBuffer bb) {
+        switch (new Attribute(bb).getType()) {
+            case VOLUME_NAME:
+                return new VolumeName(bb);
+            default:
+                return new Attribute(bb);
+        }
+    }
+
+    /**
+     * Attribute name or null.
+     *
+     * @return name ore null
+     */
+    public String getAttributeName() {
+        byte nameLength = getAttributeNameLength();
+        if (nameLength == 0) {
+            return null;
+        }
+
+        short nameOffset = getAttributeNameOffset();
+        return readString(attributeData, nameOffset, nameLength);
+    }
+
+    protected final byte getAttributeNameLength() {
+        return attributeData.get(NAME_LENGTH);
+    }
+
+    protected final short getAttributeNameOffset() {
+        return attributeData.getShort(NAME_OFFSET);
+    }
+
     public StreamProvider getPayload() {
+        final ByteBuffer payload = getPayloadBuffer();
         return new StreamProvider() {
             @Override
             public InputStream getStream() {
@@ -107,22 +97,38 @@ public final class Attribute {
     }
 
     public AttributeType getType() {
-        return type;
+        final int typeInt = attributeData.getInt(TYPE_IDENTIFIER);
+        return AttributeType.parse(typeInt);
     }
 
     public int getLength() {
-        return this.length;
+        return attributeData.getInt(ATTRIBUTE_LENGTH);
     }
 
     public boolean isResident() {
-        return nonResident == 0;
+        return attributeData.get(NON_RESIDENT) == 0;
     }
 
-    public String getAttributeName() {
-        return attributeName;
+    public short getFlags() {
+        return attributeData.getShort(FLAGS);
     }
 
-    public String getPayloadAsString() {
-        return readString(payload, (short) 0, payloadLength);
+    public short getIdentifier() {
+        return attributeData.getShort(IDENTIFIER);
+    }
+
+    protected final int getPayloadLength() {
+        return attributeData.getInt(PAYLOAD_LENGTH);
+    }
+
+    protected final short getPayloadOffset() {
+        return (short) (attributeData.getShort(PAYLOAD_OFFSET) + 2 * getAttributeNameLength());
+    }
+
+    protected ByteBuffer getPayloadBuffer() {
+        int payloadLength = getPayloadLength();
+        short payloadOffset = getPayloadOffset();
+        final int payloadEnd = payloadOffset + payloadLength;
+        return BufferUtil.copy(attributeData, payloadOffset, payloadEnd);
     }
 }

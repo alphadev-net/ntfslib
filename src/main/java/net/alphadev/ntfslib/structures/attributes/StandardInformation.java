@@ -16,6 +16,7 @@
 package net.alphadev.ntfslib.structures.attributes;
 
 import net.alphadev.ntfslib.util.AbsoluteDataStream;
+import net.alphadev.ntfslib.util.TimeConversionUtil;
 
 public class StandardInformation {
     public static final byte CREATION_TIME_OFFSET = 0x00;
@@ -46,10 +47,10 @@ public class StandardInformation {
 
     public StandardInformation(Attribute attr) {
         final AbsoluteDataStream bb = new AbsoluteDataStream(attr.getPayload());
-        cTime = Attribute.parseTimestamp(bb, CREATION_TIME_OFFSET);
-        aTime = Attribute.parseTimestamp(bb, ALTERATION_TIME_OFFSET);
-        mTime = Attribute.parseTimestamp(bb, MFT_CHANGE_TIME_OFFSET);
-        rTime = Attribute.parseTimestamp(bb, READ_TIME_OFFSET);
+        cTime = TimeConversionUtil.parseTimestamp(bb, CREATION_TIME_OFFSET);
+        aTime = TimeConversionUtil.parseTimestamp(bb, ALTERATION_TIME_OFFSET);
+        mTime = TimeConversionUtil.parseTimestamp(bb, MFT_CHANGE_TIME_OFFSET);
+        rTime = TimeConversionUtil.parseTimestamp(bb, READ_TIME_OFFSET);
         dosPermissions = parseDosPermissions(bb, DOS_FILE_PERMISSIONS_OFFSET);
         maxVersions = bb.getInt(MAX_VERSIONS_OFFSET);
         versionNumber = bb.getInt(VERSION_NUMBER_OFFSET);

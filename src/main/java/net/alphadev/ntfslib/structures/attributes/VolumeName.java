@@ -15,14 +15,15 @@
  */
 package net.alphadev.ntfslib.structures.attributes;
 
-public class VolumeInfo {
-    private String volumeLabel;
+import java.nio.ByteBuffer;
 
-    public VolumeInfo(Attribute attr) {
-        volumeLabel = attr.getPayloadAsString();
+public class VolumeName extends Attribute {
+    public VolumeName(ByteBuffer buffer) {
+        super(buffer);
     }
 
     public String getVolumeLabel() {
-        return volumeLabel;
+        ByteBuffer payload = getPayloadBuffer();
+        return readString(payload, (short) 0, payload.remaining());
     }
 }
