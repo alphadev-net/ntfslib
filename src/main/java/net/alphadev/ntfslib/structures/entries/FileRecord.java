@@ -89,7 +89,7 @@ public class FileRecord {
         nextAttribute = offsetFirstAttribute;
         while (bb.getInt(nextAttribute) != END_OF_ATTRIBUTES) {
             final ByteBuffer inner = BufferUtil.copy(bb, nextAttribute);
-            final Attribute attribute = new Attribute(inner);
+            final Attribute attribute = Attribute.create(inner);
             this.attributes.add(attribute);
             nextAttribute += attribute.getLength();
         }

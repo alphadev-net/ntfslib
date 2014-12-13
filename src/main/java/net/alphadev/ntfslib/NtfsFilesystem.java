@@ -49,8 +49,7 @@ public class NtfsFilesystem implements Filesystem {
         if (volumeName == null) {
             try {
                 FileRecord volumeFile = mft.getEntry(KnownMftEntries.VOLUME);
-                Attribute attr = volumeFile.getAttribute(AttributeType.VOLUME_NAME);
-                volumeName = new VolumeName(attr);
+                volumeName = (VolumeName) volumeFile.getAttribute(AttributeType.VOLUME_NAME);
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
