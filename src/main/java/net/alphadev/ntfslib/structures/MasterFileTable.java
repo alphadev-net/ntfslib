@@ -47,11 +47,17 @@ public class MasterFileTable {
         return mainMft;
     }
 
-    public FileRecord getEntry(KnownMftEntries entry) throws IOException {
+    public FileRecord getEntry(KnownMftEntries entry) {
         return getEntry(entry.getValue() * parameter.getBytesPerMftRecord());
     }
 
-    public FileRecord getEntry(long address) throws IOException {
-        return new FileRecord(volume, baseOffset + address);
+    public FileRecord getEntry(long address) {
+        try {
+            return new FileRecord(volume, baseOffset + address);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }

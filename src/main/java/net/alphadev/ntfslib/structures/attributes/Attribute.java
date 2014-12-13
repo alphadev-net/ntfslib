@@ -49,6 +49,15 @@ public class Attribute {
         return sb.toString();
     }
 
+    public static Attribute create(ByteBuffer bb) {
+        switch (new Attribute(bb).getType()) {
+            case VOLUME_NAME:
+                return new VolumeName(bb);
+            default:
+                return new Attribute(bb);
+        }
+    }
+
     /**
      * Attribute name or null.
      *
@@ -121,14 +130,5 @@ public class Attribute {
         short payloadOffset = getPayloadOffset();
         final int payloadEnd = payloadOffset + payloadLength;
         return BufferUtil.copy(attributeData, payloadOffset, payloadEnd);
-    }
-
-    public static Attribute create(ByteBuffer bb) {
-        switch (new Attribute(bb).getType()) {
-            case VOLUME_NAME:
-                return new VolumeName(bb);
-            default:
-                return new Attribute(bb);
-        }
     }
 }
