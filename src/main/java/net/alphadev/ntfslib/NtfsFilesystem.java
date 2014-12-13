@@ -37,7 +37,7 @@ public class NtfsFilesystem implements Filesystem {
     private final MasterFileTable mft;
     private final Volume volume;
     private VolumeName volumeName;
-    private Directory rootDir;
+    private Directory fsRoot;
 
     public NtfsFilesystem(BlockDevice device) throws IOException {
         final BootSector boot = BootSector.read(device);
@@ -60,7 +60,7 @@ public class NtfsFilesystem implements Filesystem {
 
     @Override
     public Directory getRoot() {
-        if (rootDir == null) {
+        if (fsRoot == null) {
             final FileRecord rootDir = mft.getEntry(KnownMftEntries.ROOT);
 
             if (rootDir != null) {
@@ -68,6 +68,6 @@ public class NtfsFilesystem implements Filesystem {
             }
         }
 
-        return rootDir;
+        return fsRoot;
     }
 }
