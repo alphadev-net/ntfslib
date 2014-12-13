@@ -25,8 +25,6 @@ import java.io.InputStream;
 import java.nio.ByteBuffer;
 
 public final class Attribute {
-    public static final long EPOCH_DIFFERENCE = 116444736000000000L;
-
     public static final short TYPE_IDENTIFIER = 0x00;
     public static final short ATTRIBUTE_LENGTH = 0x04;
     public static final short NON_RESIDENT = 0x08;
@@ -68,20 +66,7 @@ public final class Attribute {
         payload = BufferUtil.copy(bb, payloadOffset, payloadEnd);
     }
 
-    /**
-     * Converts Microsoft time value to Unix timestamp.
-     */
-    public static long parseTimestamp(AbsoluteDataStream bb, int offset) {
-        long msftTime = bb.getLong(offset);
-        long unixTimestamp = msftTime - EPOCH_DIFFERENCE;
-        return unixTimestamp / 100L;
-    }
 
-    public static long parseTimestamp(ByteBuffer bb, int offset) {
-        long msftTime = bb.getLong(offset);
-        long unixTimestamp = msftTime - EPOCH_DIFFERENCE;
-        return unixTimestamp / 100L;
-    }
 
     public static String readString(ByteBuffer buffer, short offset, int length) {
         StringBuilder sb = new StringBuilder();
