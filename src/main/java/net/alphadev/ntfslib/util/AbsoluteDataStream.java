@@ -60,6 +60,10 @@ public class AbsoluteDataStream {
         }
     }
 
+    public char getChar(int absPosition) {
+        return (char) getShort(absPosition);
+    }
+
     public byte getByte(int absPosition) {
         try {
             checkPosition(absPosition);
