@@ -22,6 +22,7 @@ import net.alphadev.ntfslib.structures.BootSector;
 import net.alphadev.ntfslib.structures.MasterFileTable;
 import net.alphadev.ntfslib.structures.Volume;
 import net.alphadev.ntfslib.structures.attributes.AttributeType;
+import net.alphadev.ntfslib.structures.attributes.NtfsDirectory;
 import net.alphadev.ntfslib.structures.attributes.VolumeName;
 import net.alphadev.ntfslib.structures.entries.FileRecord;
 import net.alphadev.ntfslib.structures.entries.KnownMftEntries;
@@ -64,7 +65,7 @@ public class NtfsFilesystem implements Filesystem {
             final FileRecord rootDir = mft.getEntry(KnownMftEntries.ROOT);
 
             if (rootDir != null) {
-                //rootDir = Directory
+                fsRoot = new NtfsDirectory(rootDir);
             }
         }
 

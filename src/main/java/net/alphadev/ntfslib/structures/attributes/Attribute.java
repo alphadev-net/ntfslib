@@ -64,6 +64,10 @@ public class Attribute {
         switch (new Attribute(bb).getType()) {
             case VOLUME_NAME:
                 return new VolumeName(bb);
+            case INDEX_ROOT:
+                return new IndexRoot(bb);
+            case FILE_NAME:
+                return new Filename(bb);
             default:
                 return new Attribute(bb);
         }
