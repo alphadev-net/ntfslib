@@ -32,7 +32,7 @@ public class Filename extends Attribute {
     public static final byte EA_REPARSE_OFFSET = 0x3c;
     public static final byte FILENAME_LENGTH_CHARACTER = 0x40;
     public static final byte FILENAME_NAMESPACE = 0x41;
-    public static final byte FILENAME_LENGTH_UNICODE = 0x42;
+    public static final byte FILENAME_OFFSET = 0x42;
 
     private ByteBuffer bb;
 
@@ -71,5 +71,18 @@ public class Filename extends Attribute {
 
     public EnumSet<FileFlag> getFilenameFlags() {
         return FileFlag.parse(bb.getInt(FLAGS_OFFSET));
+    }
+
+    public String getFilename() {
+        byte filenameLength = bb.get(FILENAME_LENGTH_CHARACTER);
+        StringBuilder sb = new StringBuilder(filenameLength);
+        for (int i = 0; i < filenameLength; i++) {
+            sb.append(bb.getChar(FILENAME_OFFSET + i * 2));
+        }
+        return sb.toString();
+    }
+
+    public byte getFileNameSpace() {
+        return bb.get(FILENAME_NAMESPACE);
     }
 }
