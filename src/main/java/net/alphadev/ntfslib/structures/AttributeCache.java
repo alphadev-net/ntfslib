@@ -1,4 +1,7 @@
-package net.alphadev.ntfslib.structures.attributes;
+package net.alphadev.ntfslib.structures;
+
+import net.alphadev.ntfslib.structures.attributes.Attribute;
+import net.alphadev.ntfslib.structures.attributes.AttributeType;
 
 import java.util.HashMap;
 

@@ -17,7 +17,7 @@ package net.alphadev.ntfslib.structures.entries;
 
 import net.alphadev.ntfslib.structures.Volume;
 import net.alphadev.ntfslib.structures.attributes.Attribute;
-import net.alphadev.ntfslib.structures.attributes.AttributeCache;
+import net.alphadev.ntfslib.structures.AttributeCache;
 import net.alphadev.ntfslib.structures.attributes.AttributeType;
 import net.alphadev.ntfslib.util.BufferUtil;
 
@@ -46,47 +46,26 @@ public class FileRecord {
     private final AttributeCache attributes = new AttributeCache();
     private final Volume volume;
     private final long offset;
-
-    private long logFileSequenceNumber;
-    private long baseRecord;
-    private int mftSizeUsed;
-    private int mftSizeAllocated;
-    private short payloadOffset;
-    private short payloadLength;
-    private short sequenceValue;
-    private short linkCount;
-    private short offsetFirstAttribute;
-    private int nextAttribute;
-    private short flags;
+    private final ByteBuffer bb;
 
     public FileRecord(Volume volume, long offset) throws IOException {
         this.volume = volume;
         this.offset = offset;
 
         final int size = volume.getParameter().getBytesPerMftRecord();
-        final ByteBuffer bb = ByteBuffer.allocate(size);
+        bb = ByteBuffer.allocate(size);
         bb.order(ByteOrder.LITTLE_ENDIAN);
         volume.read(offset, bb);
         bb.rewind();
 
-        int magic = bb.getInt(SIGNATURE_OFFSET);
+        int magic = getSignature();
         if (magic != FILE_SIGNATURE) {
             throw new IllegalArgumentException("no magic signature found!");
         }
 
-        payloadOffset = bb.getShort(PAYLOAD_OFFSET);
-        payloadLength = bb.getShort(PAYLOAD_LENGTH);
-        logFileSequenceNumber = bb.getLong(LOG_SEQUENCE_NUMBER);
-        sequenceValue = bb.getShort(SEQUENCE_VALUE);
-        linkCount = bb.getShort(LINK_COUNT);
-        offsetFirstAttribute = bb.getShort(FIRST_ATTRIBUTE);
-        flags = bb.getShort(FLAGS);
-        mftSizeUsed = bb.getInt(SIZE_USED);
-        mftSizeAllocated = bb.getInt(SIZE_ALLOCATED);
-        baseRecord = bb.getLong(BASE_RECORD);
-        nextAttribute = bb.getShort(NETX_ATTR);
+        //bb.getShort(NETX_ATTR)
 
-        nextAttribute = offsetFirstAttribute;
+        int nextAttribute = bb.getShort(FIRST_ATTRIBUTE);
         while (bb.getInt(nextAttribute) != END_OF_ATTRIBUTES) {
             final ByteBuffer inner = BufferUtil.copy(bb, nextAttribute);
             final Attribute attribute = Attribute.create(inner);
@@ -97,5 +76,53 @@ public class FileRecord {
 
     public Attribute getAttribute(AttributeType attribute) {
         return attributes.get(attribute);
+    }
+
+    public AttributeCache getAttributes() {
+        return attributes;
+    }
+
+    public long getOffset() {
+        return offset;
+    }
+
+    public int getSignature() {
+        return bb.getInt(SIGNATURE_OFFSET);
+    }
+
+    public long getLogFileSequenceNumber() {
+        return bb.getLong(LOG_SEQUENCE_NUMBER);
+    }
+
+    public long getBaseRecord() {
+        return bb.getLong(BASE_RECORD);
+    }
+
+    public int getMftSizeUsed() {
+        return bb.getInt(SIZE_USED);
+    }
+
+    public int getMftSizeAllocated() {
+        return bb.getInt(SIZE_ALLOCATED);
+    }
+
+    public short getPayloadOffset() {
+        return bb.getShort(PAYLOAD_OFFSET);
+    }
+
+    public short getPayloadLength() {
+        return bb.getShort(PAYLOAD_LENGTH);
+    }
+
+    public short getSequenceValue() {
+        return bb.getShort(SEQUENCE_VALUE);
+    }
+
+    public short getLinkCount() {
+        return bb.getShort(LINK_COUNT);
+    }
+
+    public short getFlags() {
+        return bb.getShort(FLAGS);
     }
 }

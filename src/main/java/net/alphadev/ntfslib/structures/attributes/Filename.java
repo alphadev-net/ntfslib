@@ -15,12 +15,12 @@
  */
 package net.alphadev.ntfslib.structures.attributes;
 
-import net.alphadev.ntfslib.util.AbsoluteDataStream;
 import net.alphadev.ntfslib.util.TimeConversionUtil;
 
+import java.nio.ByteBuffer;
 import java.util.EnumSet;
 
-public class Filename {
+public class Filename extends Attribute {
     public static final byte PARENT_DIRECTORY_OFFSET = 0x0;
     public static final byte CREATION_TIME_OFFSET = 0x08;
     public static final byte ALTERATION_TIME_OFFSET = 0x10;
@@ -34,58 +34,42 @@ public class Filename {
     public static final byte FILENAME_NAMESPACE = 0x41;
     public static final byte FILENAME_LENGTH_UNICODE = 0x42;
 
-    private long parentDirectory;
-    private long cTime;
-    private long aTime;
-    private long mTime;
-    private long rTime;
-    private long allocatedFileSize;
-    private long realFileSize;
-    private EnumSet<FileFlag> flags;
-    private byte filenameNamespace;
-    private String filenameUnicode;
+    private ByteBuffer bb;
 
-    public Filename(Attribute attr) {
-        final AbsoluteDataStream bb = new AbsoluteDataStream(attr.getPayload());
-        parentDirectory = bb.getLong(PARENT_DIRECTORY_OFFSET);
-        cTime = TimeConversionUtil.parseTimestamp(bb, CREATION_TIME_OFFSET);
-        aTime = TimeConversionUtil.parseTimestamp(bb, ALTERATION_TIME_OFFSET);
-        mTime = TimeConversionUtil.parseTimestamp(bb, MFT_CHANGE_TIME_OFFSET);
-        rTime = TimeConversionUtil.parseTimestamp(bb, READ_TIME_OFFSET);
-        allocatedFileSize = bb.getLong(ALLOCATED_SIZE_OFFSET);
-        realFileSize = bb.getLong(REAL_SIZE_OFFSET);
-        flags = FileFlag.parse(bb.getInt(FLAGS_OFFSET));
+    public Filename(ByteBuffer data) {
+        super(data);
+        bb = getPayloadBuffer();
     }
 
     public long getParentDirectory() {
-        return parentDirectory;
+        return bb.getLong(PARENT_DIRECTORY_OFFSET);
     }
 
     public long getFileCreationTime() {
-        return cTime;
+        return TimeConversionUtil.parseTimestamp(bb, CREATION_TIME_OFFSET);
     }
 
     public long getFileModificationTime() {
-        return aTime;
+        return TimeConversionUtil.parseTimestamp(bb, ALTERATION_TIME_OFFSET);
     }
 
     public long getMftModificationTime() {
-        return mTime;
+        return TimeConversionUtil.parseTimestamp(bb, MFT_CHANGE_TIME_OFFSET);
     }
 
     public long getFileAccessTime() {
-        return rTime;
+        return TimeConversionUtil.parseTimestamp(bb, READ_TIME_OFFSET);
     }
 
     public long getAllocatedFileSize() {
-        return allocatedFileSize;
+        return bb.getLong(ALLOCATED_SIZE_OFFSET);
     }
 
     public long getRealFileSize() {
-        return realFileSize;
+        return bb.getLong(REAL_SIZE_OFFSET);
     }
 
-    public EnumSet<FileFlag> getFlags() {
-        return flags;
+    public EnumSet<FileFlag> getFilenameFlags() {
+        return FileFlag.parse(bb.getInt(FLAGS_OFFSET));
     }
 }

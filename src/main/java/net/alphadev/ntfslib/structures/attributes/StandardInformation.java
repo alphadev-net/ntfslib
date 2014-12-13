@@ -15,10 +15,11 @@
  */
 package net.alphadev.ntfslib.structures.attributes;
 
-import net.alphadev.ntfslib.util.AbsoluteDataStream;
 import net.alphadev.ntfslib.util.TimeConversionUtil;
 
-public class StandardInformation {
+import java.nio.ByteBuffer;
+
+public class StandardInformation extends Attribute {
     public static final byte CREATION_TIME_OFFSET = 0x00;
     public static final byte ALTERATION_TIME_OFFSET = 0x08;
     public static final byte MFT_CHANGE_TIME_OFFSET = 0x10;
@@ -32,69 +33,47 @@ public class StandardInformation {
     public static final byte QUOTA_CHARGED_OFFSET = 0x38;
     public static final byte UPDATE_SEQUENCE_NUMBER_OFFSET = 0x40;
 
-    private long cTime;
-    private long aTime;
-    private long mTime;
-    private long rTime;
-    private long quota;
-    private long updateSequenceNumber;
-    private DosPermissions dosPermissions;
-    private int maxVersions;
-    private int versionNumber;
-    private int classId;
-    private int ownerId;
-    private int securityId;
+    private ByteBuffer bb;
 
-    public StandardInformation(Attribute attr) {
-        final AbsoluteDataStream bb = new AbsoluteDataStream(attr.getPayload());
-        cTime = TimeConversionUtil.parseTimestamp(bb, CREATION_TIME_OFFSET);
-        aTime = TimeConversionUtil.parseTimestamp(bb, ALTERATION_TIME_OFFSET);
-        mTime = TimeConversionUtil.parseTimestamp(bb, MFT_CHANGE_TIME_OFFSET);
-        rTime = TimeConversionUtil.parseTimestamp(bb, READ_TIME_OFFSET);
-        dosPermissions = parseDosPermissions(bb, DOS_FILE_PERMISSIONS_OFFSET);
-        maxVersions = bb.getInt(MAX_VERSIONS_OFFSET);
-        versionNumber = bb.getInt(VERSION_NUMBER_OFFSET);
-        classId = bb.getInt(CLASS_ID_OFFSET);
-        ownerId = bb.getInt(OWNER_ID_OFFSET);
-        securityId = bb.getInt(SECURITY_ID_OFFSET);
-        quota = bb.getLong(QUOTA_CHARGED_OFFSET);
-        updateSequenceNumber = bb.getLong(UPDATE_SEQUENCE_NUMBER_OFFSET);
+    public StandardInformation(ByteBuffer data) {
+        super(data);
+        bb = getPayloadBuffer();
     }
 
-    private DosPermissions parseDosPermissions(AbsoluteDataStream bb, int offset) {
+    private DosPermissions parseDosPermissions(ByteBuffer bb, int offset) {
         return new DosPermissions();
     }
 
     public long getFileCreationTime() {
-        return cTime;
+        return TimeConversionUtil.parseTimestamp(bb, CREATION_TIME_OFFSET);
     }
 
     public long getFileModificationTime() {
-        return aTime;
+        return TimeConversionUtil.parseTimestamp(bb, ALTERATION_TIME_OFFSET);
     }
 
     public long getMftModificationTime() {
-        return mTime;
+        return TimeConversionUtil.parseTimestamp(bb, MFT_CHANGE_TIME_OFFSET);
     }
 
     public long getFileAccessTime() {
-        return rTime;
+        return TimeConversionUtil.parseTimestamp(bb, READ_TIME_OFFSET);
     }
 
     public DosPermissions getDosPermissions() {
-        return dosPermissions;
+        return parseDosPermissions(bb, DOS_FILE_PERMISSIONS_OFFSET);
     }
 
     public int getMaxVersions() {
-        return maxVersions;
+        return bb.getInt(MAX_VERSIONS_OFFSET);
     }
 
     public int getVersionNumber() {
-        return versionNumber;
+        return bb.getInt(VERSION_NUMBER_OFFSET);
     }
 
     public int getClassId() {
-        return classId;
+        return bb.getInt(CLASS_ID_OFFSET);
     }
 
     /**
@@ -102,7 +81,7 @@ public class StandardInformation {
      * Win2k
      */
     public int getOwnerId() {
-        return ownerId;
+        return bb.getInt(OWNER_ID_OFFSET);
     }
 
     /**
@@ -110,7 +89,7 @@ public class StandardInformation {
      * Win2k
      */
     public int getSecurityId() {
-        return securityId;
+        return bb.getInt(SECURITY_ID_OFFSET);
     }
 
     /**
@@ -118,7 +97,7 @@ public class StandardInformation {
      * Win2k
      */
     public long getQuotaCharged() {
-        return quota;
+        return bb.getLong(QUOTA_CHARGED_OFFSET);
     }
 
     /**
@@ -126,6 +105,6 @@ public class StandardInformation {
      * Win2k
      */
     public long getUpdateSequenceNumber() {
-        return updateSequenceNumber;
+        return bb.getLong(UPDATE_SEQUENCE_NUMBER_OFFSET);
     }
 }
