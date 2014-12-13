@@ -1,5 +1,5 @@
 /**
- * Copyright © 2014-2015 Jan Seeger
+ * Copyright © 2014 Jan Seeger
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,10 @@
  */
 package net.alphadev.ntfslib.api;
 
-public interface Filesystem {
-    String getVolumeName();
+public interface Entry {
+    Entry getParent();
 
-    Directory getRoot();
+    String getName();
+
+    boolean isDirectory();
 }

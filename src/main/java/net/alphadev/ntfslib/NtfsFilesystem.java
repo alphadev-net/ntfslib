@@ -16,6 +16,7 @@
 package net.alphadev.ntfslib;
 
 import net.alphadev.ntfslib.api.BlockDevice;
+import net.alphadev.ntfslib.api.Directory;
 import net.alphadev.ntfslib.api.Filesystem;
 import net.alphadev.ntfslib.structures.BootSector;
 import net.alphadev.ntfslib.structures.MasterFileTable;
@@ -36,6 +37,7 @@ public class NtfsFilesystem implements Filesystem {
     private final MasterFileTable mft;
     private final Volume volume;
     private VolumeName volumeName;
+    private Directory rootDir;
 
     public NtfsFilesystem(BlockDevice device) throws IOException {
         final BootSector boot = BootSector.read(device);
@@ -54,5 +56,18 @@ public class NtfsFilesystem implements Filesystem {
         }
 
         return volumeName.getVolumeLabel();
+    }
+
+    @Override
+    public Directory getRoot() {
+        if (rootDir == null) {
+            final FileRecord rootDir = mft.getEntry(KnownMftEntries.ROOT);
+
+            if (rootDir != null) {
+                //rootDir = Directory
+            }
+        }
+
+        return rootDir;
     }
 }
