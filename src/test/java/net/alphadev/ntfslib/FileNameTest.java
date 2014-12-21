@@ -39,6 +39,7 @@ public class FileNameTest {
         Filesystem ntfs = new NtfsFilesystem(dev);
         Directory root = ntfs.getRoot();
         Entry folder = root.getEntry("Test");
+        Assert.assertNull(root.getParent());
         Assert.assertEquals(".", root.getName());
         Assert.assertEquals("Test", folder.getName());
         Assert.assertEquals(root, folder.getParent());
