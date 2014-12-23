@@ -1,6 +1,6 @@
 # NtfsLib
 
-[![Build Status](https://travis-ci.org/alphadev-net/ntfs-lib.svg?branch=master)](https://travis-ci.org/alphadev-net/ntfs-lib)
+[![Build Status](https://travis-ci.org/alphadev-net/ntfs-lib.svg?branch=dev)](https://travis-ci.org/alphadev-net/ntfs-lib)
 
 Provides access to NTFS Filesystems in pure Java.
 
