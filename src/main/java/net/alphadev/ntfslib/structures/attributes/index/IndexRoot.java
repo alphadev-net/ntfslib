@@ -1,6 +1,9 @@
-package net.alphadev.ntfslib.structures.attributes;
+package net.alphadev.ntfslib.structures.attributes.index;
 
 import java.nio.ByteBuffer;
+
+import net.alphadev.ntfslib.structures.attributes.Attribute;
+import net.alphadev.ntfslib.structures.attributes.AttributeType;
 
 /**
  * Created by jan on 13.12.14.
@@ -57,5 +60,10 @@ public class IndexRoot extends Attribute {
 
     public int getIndexEntryAllocationSize() {
         return bb.get(INDEX_ALLOCATION_ENTRY_SIZE);
+    }
+
+    @Override
+    public ByteBuffer getPayloadBuffer() {
+        return super.getPayloadBuffer();
     }
 }

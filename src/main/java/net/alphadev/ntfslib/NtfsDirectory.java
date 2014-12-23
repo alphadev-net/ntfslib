@@ -5,11 +5,13 @@ import net.alphadev.ntfslib.api.Entry;
 import net.alphadev.ntfslib.structures.MasterFileTable;
 import net.alphadev.ntfslib.structures.attributes.AttributeType;
 import net.alphadev.ntfslib.structures.attributes.Filename;
-import net.alphadev.ntfslib.structures.attributes.IndexRoot;
+import net.alphadev.ntfslib.structures.attributes.index.IndexEntry;
+import net.alphadev.ntfslib.structures.attributes.index.IndexRoot;
 import net.alphadev.ntfslib.structures.entries.FileRecord;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.nio.ByteBuffer;
 
 /**
  * Created by jan on 13.12.14.
@@ -30,10 +32,12 @@ public class NtfsDirectory extends NtfsStructure implements Directory {
         int offset = indexRoot.getFirstEntryOffset();
         indexRoot.getIndexEntryAllocationSize();
 
-
-        if (indexRoot.isLargeIndex()) {
-            // TODO: fetch INDEX_ALLOCATION_FILE
-        }
+        final ByteBuffer indexRootData = indexRoot.getPayloadBuffer();
+        IndexEntry entry;
+        do {
+            entry = new IndexEntry(indexRootData, offset);
+            entryCache.put(entry.getName(), new NtfsEntry(mft, null));
+        } while (entry != null && !entry.isLast());
     }
 
     @Override

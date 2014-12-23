@@ -30,6 +30,7 @@
  */
 package net.alphadev.ntfslib.structures.attributes;
 
+import net.alphadev.ntfslib.structures.attributes.index.IndexRoot;
 import net.alphadev.ntfslib.util.BufferUtil;
 
 import java.nio.ByteBuffer;
