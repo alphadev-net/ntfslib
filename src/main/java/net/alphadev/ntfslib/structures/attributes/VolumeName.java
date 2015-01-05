@@ -23,7 +23,7 @@ public class VolumeName extends Attribute {
     }
 
     public String getVolumeLabel() {
-        ByteBuffer payload = getPayloadBuffer();
-        return readString(payload, (short) 0, payload.remaining());
+        final ByteBuffer payload = getPayloadBuffer();
+        return readString(payload, (short) 0, payload.remaining(), (byte) 2);
     }
 }

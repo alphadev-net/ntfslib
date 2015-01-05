@@ -46,16 +46,16 @@ public class Attribute {
     private static final short PAYLOAD_LENGTH = 0x10;
     private static final short PAYLOAD_OFFSET = 0x14;
 
-    private ByteBuffer attributeData;
+    protected final ByteBuffer attributeData;
 
     public Attribute(ByteBuffer attributeData) {
         this.attributeData = attributeData;
     }
 
-    public static String readString(ByteBuffer buffer, short offset, int length) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < length; i += 2) {
-            sb.append(buffer.getChar(i + offset));
+    public static String readString(ByteBuffer buffer, short offset, int length, byte step) {
+        final StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < length; i += step) {
+            sb.append(buffer.getChar(i * step + offset));
         }
 
         return sb.toString();
@@ -86,7 +86,7 @@ public class Attribute {
         }
 
         short nameOffset = getAttributeNameOffset();
-        return readString(attributeData, nameOffset, nameLength);
+        return readString(attributeData, nameOffset, nameLength, (byte) 1);
     }
 
     protected final byte getAttributeNameLength() {

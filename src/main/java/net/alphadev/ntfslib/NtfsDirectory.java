@@ -8,6 +8,7 @@ import net.alphadev.ntfslib.structures.attributes.Filename;
 import net.alphadev.ntfslib.structures.attributes.index.IndexEntry;
 import net.alphadev.ntfslib.structures.attributes.index.IndexRoot;
 import net.alphadev.ntfslib.structures.entries.FileRecord;
+import net.alphadev.ntfslib.util.BufferUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,13 +31,11 @@ public class NtfsDirectory extends NtfsStructure implements Directory {
         indexRoot = (IndexRoot) rootDir.getAttribute(AttributeType.INDEX_ROOT);
 
         int offset = indexRoot.getFirstEntryOffset();
-        indexRoot.getIndexEntryAllocationSize();
-
-        final ByteBuffer indexRootData = indexRoot.getPayloadBuffer();
         IndexEntry entry;
         do {
-            entry = new IndexEntry(indexRootData, offset);
-            entryCache.put(entry.getName(), new NtfsEntry(mft, null));
+            entry = new IndexEntry(indexRoot, offset);
+            entryCache.put(entry.getName(), new NtfsEntry(mft, entry, parentDir));
+            offset += indexRoot.getIndexEntryAllocationSize();
         } while (entry != null && !entry.isLast());
     }
 

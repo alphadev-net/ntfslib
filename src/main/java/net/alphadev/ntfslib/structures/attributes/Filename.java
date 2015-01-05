@@ -74,12 +74,8 @@ public class Filename extends Attribute {
     }
 
     public String getFilename() {
-        byte filenameLength = bb.get(FILENAME_LENGTH_CHARACTER);
-        StringBuilder sb = new StringBuilder(filenameLength);
-        for (int i = 0; i < filenameLength; i++) {
-            sb.append(bb.getChar(FILENAME_OFFSET + i * 2));
-        }
-        return sb.toString();
+        final byte filenameLength = bb.get(FILENAME_LENGTH_CHARACTER);
+        return readString(bb, FILENAME_OFFSET, filenameLength, (byte) 2);
     }
 
     public byte getFileNameSpace() {
