@@ -55,7 +55,7 @@ public class Attribute {
     public static String readString(ByteBuffer buffer, short offset, int length, byte step) {
         final StringBuilder sb = new StringBuilder();
         for (int i = 0; i < length; i += step) {
-            sb.append(buffer.getChar(i * step + offset));
+            sb.append(buffer.getChar(i + offset));
         }
 
         return sb.toString();
