@@ -35,7 +35,6 @@ public class FileNameTest {
         dev = RamDisk.readGzipped(getClass().getResourceAsStream("ntfs.img.gz"));
     }
 
-    @Ignore
     @Test
     public void readFolderName() throws IOException {
         Filesystem ntfs = new NtfsFilesystem(dev);

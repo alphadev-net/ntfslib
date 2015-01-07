@@ -75,9 +75,9 @@ public class Attribute {
             return null;
         }
 
-        short nameOffset = getAttributeNameOffset();
-        //return readString(attributeData, nameOffset, nameLength, (byte) 1);
-        return null;
+        int nameOffset = getAttributeNameOffset();
+        int nameLength = getAttributeNameLength();
+        return BufferUtil.readString(attributeData, nameOffset, nameLength);
     }
 
     public boolean isNamedAttribute() {
@@ -124,7 +124,6 @@ public class Attribute {
     protected ByteBuffer getPayloadBuffer() {
         int payloadLength = getPayloadLength();
         short payloadOffset = getPayloadOffset();
-        final int payloadEnd = payloadOffset + payloadLength;
-        return BufferUtil.copy(attributeData, payloadOffset, payloadEnd);
+        return BufferUtil.copy(attributeData, payloadOffset, payloadLength);
     }
 }

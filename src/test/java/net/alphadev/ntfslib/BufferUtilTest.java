@@ -44,12 +44,36 @@ public class BufferUtilTest {
         Assert.assertEquals("test", result);
     }
 
-     @Test
+    @Test
     public void convertsSimpleASCIIStringWithBoundaries() throws IOException {
         final ByteBuffer buffer = ByteBuffer.wrap(
             new byte[]{ 0x11, 0x74, 0x65, 0x73, 0x74, 0x11 });
 
         String result = BufferUtil.readAsciiString(buffer, 1, 4);
         Assert.assertEquals("test", result);
+    }
+
+    @Test
+    public void copyTruncatesCorrectly() {
+        final ByteBuffer buffer = ByteBuffer.wrap(
+            new byte[]{ 0x11, 0x74, 0x65, 0x73, 0x74, 0x11 });
+        final ByteBuffer expected  = ByteBuffer.wrap(
+            new byte[]{ 0x74, 0x65, 0x73, 0x74, 0x11 });
+
+        final ByteBuffer result = BufferUtil.copy(buffer, 1);
+
+        Assert.assertEquals(expected, result);
+    }
+
+    @Test
+    public void copyTruncatesCorrectlyBothEnds() {
+        final ByteBuffer buffer = ByteBuffer.wrap(
+            new byte[]{ 0x11, 0x74, 0x65, 0x73, 0x74, 0x11 });
+        final ByteBuffer expected  = ByteBuffer.wrap(
+            new byte[]{ 0x74, 0x65, 0x73, 0x74 });
+
+        final ByteBuffer result = BufferUtil.copy(buffer, 1, 4);
+
+        Assert.assertEquals(expected, result);
     }
 }
