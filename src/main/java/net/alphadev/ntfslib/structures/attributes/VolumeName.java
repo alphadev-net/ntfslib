@@ -15,6 +15,8 @@
  */
 package net.alphadev.ntfslib.structures.attributes;
 
+import net.alphadev.ntfslib.util.BufferUtil;
+
 import java.nio.ByteBuffer;
 
 public class VolumeName extends Attribute {
@@ -24,6 +26,6 @@ public class VolumeName extends Attribute {
 
     public String getVolumeLabel() {
         final ByteBuffer payload = getPayloadBuffer();
-        return readString(payload, (short) 0, payload.remaining(), (byte) 2);
+        return BufferUtil.readString(payload, 0, payload.remaining());
     }
 }

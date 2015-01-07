@@ -52,15 +52,6 @@ public class Attribute {
         this.attributeData = attributeData;
     }
 
-    public static String readString(ByteBuffer buffer, short offset, int length, byte step) {
-        final StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < length; i += step) {
-            sb.append(buffer.getChar(i + offset));
-        }
-
-        return sb.toString();
-    }
-
     public static Attribute create(ByteBuffer bb) {
         switch (new Attribute(bb).getType()) {
             case VOLUME_NAME:
@@ -80,13 +71,17 @@ public class Attribute {
      * @return name ore null
      */
     public String getAttributeName() {
-        byte nameLength = getAttributeNameLength();
-        if (nameLength == 0) {
+        if (!isNamedAttribute()) {
             return null;
         }
 
         short nameOffset = getAttributeNameOffset();
-        return readString(attributeData, nameOffset, nameLength, (byte) 1);
+        //return readString(attributeData, nameOffset, nameLength, (byte) 1);
+        return null;
+    }
+
+    public boolean isNamedAttribute() {
+        return getAttributeNameLength() != 0;
     }
 
     protected final byte getAttributeNameLength() {

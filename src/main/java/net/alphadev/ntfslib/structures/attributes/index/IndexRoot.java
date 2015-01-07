@@ -67,6 +67,6 @@ public class IndexRoot extends Attribute {
 
     @Override
     public ByteBuffer getPayloadBuffer() {
-        return BufferUtil.copy(bb, HEADER_SIZE + ROOT_SIZE);
+        return BufferUtil.copy(bb, HEADER_SIZE);
     }
 }

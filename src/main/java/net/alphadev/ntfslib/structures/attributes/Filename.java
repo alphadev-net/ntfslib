@@ -15,6 +15,7 @@
  */
 package net.alphadev.ntfslib.structures.attributes;
 
+import net.alphadev.ntfslib.util.BufferUtil;
 import net.alphadev.ntfslib.util.TimeConversionUtil;
 
 import java.nio.ByteBuffer;
@@ -75,7 +76,7 @@ public class Filename extends Attribute {
 
     public String getFilename() {
         final byte filenameLength = bb.get(FILENAME_LENGTH_CHARACTER);
-        return readString(bb, FILENAME_OFFSET, filenameLength, (byte) 2);
+        return BufferUtil.readString(bb, FILENAME_OFFSET, filenameLength);
     }
 
     public byte getFileNameSpace() {

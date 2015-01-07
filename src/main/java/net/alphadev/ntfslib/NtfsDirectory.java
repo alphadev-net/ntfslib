@@ -34,8 +34,9 @@ public class NtfsDirectory extends NtfsStructure implements Directory {
         IndexEntry entry;
         do {
             entry = new IndexEntry(indexRoot, offset);
-            entryCache.put(entry.getName(), new NtfsEntry(mft, entry, parentDir));
-            offset += indexRoot.getIndexEntryAllocationSize();
+            final NtfsEntry dirEntry = new NtfsEntry(mft, entry, parentDir);
+            entryCache.put(dirEntry.getName(), dirEntry);
+            offset += entry.getSize();
         } while (entry != null && !entry.isLast());
     }
 

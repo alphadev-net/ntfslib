@@ -32,4 +32,29 @@ public class BufferUtil {
     public static ByteBuffer copy(ByteBuffer origin, int start) {
         return copy(origin, start, origin.limit());
     }
+
+    public static String readAsciiString(ByteBuffer buffer, int offset, int length) {
+        return _readString(buffer, offset, length, 1);
+    }
+
+    public static String readString(ByteBuffer buffer, int offset, int length) {
+        return _readString(buffer, offset, length, 2);
+    }
+
+    private static String _readString(ByteBuffer buffer, int offset, int length, int step) {
+        final StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < length; i += step) {
+            int curOffset = offset + i;
+
+            char character;
+            if (step == 1 ) {
+                character = (char) buffer.get(curOffset);
+            } else {
+                character = buffer.getChar(curOffset);
+            }
+            sb.append(character);
+        }
+
+        return sb.toString();
+    }
 }
