@@ -48,12 +48,17 @@ public class Attribute {
 
     protected final ByteBuffer attributeData;
 
-    public Attribute(ByteBuffer attributeData) {
+    protected Attribute(ByteBuffer attributeData) {
         this.attributeData = attributeData;
     }
 
-    public static Attribute create(ByteBuffer bb) {
-        switch (new Attribute(bb).getType()) {
+    public static Attribute create(ByteBuffer bb, int offset) {
+        final ByteBuffer temp = BufferUtil.copy(bb, offset);
+        final Attribute attr = new Attribute(temp);
+        System.out.println(offset + ": " + attr.getType() + ", " + attr.getLength());
+        bb = BufferUtil.copy(temp, 0, attr.getLength());
+
+        switch (attr.getType()) {
             case VOLUME_NAME:
                 return new VolumeName(bb);
             case INDEX_ROOT:
@@ -65,19 +70,8 @@ public class Attribute {
         }
     }
 
-    /**
-     * Attribute name or null.
-     *
-     * @return name ore null
-     */
     public String getAttributeName() {
-        if (!isNamedAttribute()) {
-            return null;
-        }
-
-        int nameOffset = getAttributeNameOffset();
-        int nameLength = getAttributeNameLength();
-        return BufferUtil.readString(attributeData, nameOffset, nameLength);
+        return BufferUtil.readString(attributeData, getAttributeNameOffset(), getAttributeNameLength() * 2);
     }
 
     public boolean isNamedAttribute() {
@@ -109,7 +103,7 @@ public class Attribute {
         return attributeData.getShort(FLAGS);
     }
 
-    public short getIdentifier() {
+    public short getId() {
         return attributeData.getShort(IDENTIFIER);
     }
 
@@ -118,12 +112,19 @@ public class Attribute {
     }
 
     protected final short getPayloadOffset() {
-        return (short) (attributeData.getShort(PAYLOAD_OFFSET) + 2 * getAttributeNameLength());
+        /*
+        * According to [1] the attribute's payload beginns at 2n+0x18 where 0x18 is the
+        * begin of the name and n is the name size.
+        *
+        * [1]: http://ftp.kolibrios.org/users/Asper/docs/NTFS/ntfsdoc.html#concept_attribute_header
+        */
+        final short attributeNameLength =  (short) (2 * getAttributeNameLength());
+        return (short) (getAttributeNameOffset() + attributeNameLength);
     }
 
     protected ByteBuffer getPayloadBuffer() {
-        int payloadLength = getPayloadLength();
-        short payloadOffset = getPayloadOffset();
-        return BufferUtil.copy(attributeData, payloadOffset, payloadLength);
+        System.out.println("  name: " + getAttributeName() + "(" + getAttributeNameLength() + ")");
+        System.out.println("  payload: " + getPayloadOffset() + " -> " + getPayloadLength());
+        return BufferUtil.copyFor(attributeData, getPayloadOffset(), getPayloadLength());
     }
 }

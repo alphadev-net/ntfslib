@@ -32,6 +32,7 @@ public class BufferUtilTest {
             new byte[]{ 0x0, 0x74, 0x0, 0x65, 0x0, 0x73, 0x0, 0x74 });
 
         String result = BufferUtil.readString(buffer, 0, 8);
+
         Assert.assertEquals("test", result);
     }
 
@@ -41,6 +42,7 @@ public class BufferUtilTest {
             new byte[]{ 0x74, 0x65, 0x73, 0x74 });
 
         String result = BufferUtil.readAsciiString(buffer, 0, 4);
+
         Assert.assertEquals("test", result);
     }
 
@@ -50,6 +52,7 @@ public class BufferUtilTest {
             new byte[]{ 0x11, 0x74, 0x65, 0x73, 0x74, 0x11 });
 
         String result = BufferUtil.readAsciiString(buffer, 1, 4);
+
         Assert.assertEquals("test", result);
     }
 
@@ -72,7 +75,7 @@ public class BufferUtilTest {
         final ByteBuffer expected  = ByteBuffer.wrap(
             new byte[]{ 0x74, 0x65, 0x73, 0x74 });
 
-        final ByteBuffer result = BufferUtil.copy(buffer, 1, 4);
+        final ByteBuffer result = BufferUtil.copyFor(buffer, 1, 4);
 
         Assert.assertEquals(expected, result);
     }

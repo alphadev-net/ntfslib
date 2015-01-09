@@ -19,19 +19,22 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 public class BufferUtil {
-    public static ByteBuffer copy(ByteBuffer origin, int start, int length) {
+    public static ByteBuffer copy(ByteBuffer origin, int start, int end) {
         ByteOrder order = origin.order();
         ByteBuffer copy = origin.duplicate();
         copy.position(start);
-        copy.limit(start + length);
+        copy.limit(end);
         copy = copy.slice();
         copy.order(order);
         return copy;
     }
 
     public static ByteBuffer copy(ByteBuffer origin, int start) {
-        int length = origin.limit() - start;
-        return copy(origin, start, length);
+        return copy(origin, start, origin.limit());
+    }
+
+    public static ByteBuffer copyFor(ByteBuffer origin, int start, int length) {
+        return copy(origin, start, start + length);
     }
 
     public static String readAsciiString(ByteBuffer buffer, int offset, int length) {

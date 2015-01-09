@@ -30,7 +30,7 @@ public class NtfsDirectory extends NtfsStructure implements Directory {
         filename = (Filename) rootDir.getAttribute(AttributeType.FILE_NAME);
         indexRoot = (IndexRoot) rootDir.getAttribute(AttributeType.INDEX_ROOT);
 
-        int offset = indexRoot.getFirstEntryOffset();
+        int offset = indexRoot.getFirstEntryOffset() + 0x10;
         IndexEntry entry;
         do {
             entry = new IndexEntry(indexRoot, offset);

@@ -1,6 +1,7 @@
 package net.alphadev.ntfslib.structures.attributes.index;
 
 import java.nio.ByteBuffer;
+import java.util.EnumSet;
 
 import net.alphadev.ntfslib.structures.attributes.Attribute;
 import net.alphadev.ntfslib.util.BitStitching;
@@ -18,7 +19,7 @@ public class IndexEntry {
     private ByteBuffer buffer;
 
     public IndexEntry(IndexRoot indexRoot, int offset) {
-        buffer = indexRoot.getPayloadBuffer();//BufferUtil.copy(indexRoot.getPayloadBuffer(), offset);
+        buffer = BufferUtil.copy(indexRoot.getPayloadBuffer(), offset);
     }
 
     public long getFileReference() {
@@ -26,17 +27,18 @@ public class IndexEntry {
     }
 
     public boolean isLast() {
-        return true;
+        return getFlags().contains(EntryFlag.LAST);
     }
 
-    public EntryFlag getFlags() {
-        return null;
+    public EnumSet<EntryFlag> getFlags() {
+        return EnumSet.noneOf(EntryFlag.class);
     }
 
     public short getSize() {
         return buffer.getShort(ENTRY_SIZE);
     }
 
-    private static class EntryFlag {
+    private enum EntryFlag {
+        LAST
     }
 }

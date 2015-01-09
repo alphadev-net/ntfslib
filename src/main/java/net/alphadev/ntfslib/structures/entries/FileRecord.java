@@ -63,12 +63,9 @@ public class FileRecord {
             throw new IllegalArgumentException("no magic signature found!");
         }
 
-        //bb.getShort(NETX_ATTR)
-
         int nextAttribute = bb.getShort(FIRST_ATTRIBUTE);
         while (bb.getInt(nextAttribute) != END_OF_ATTRIBUTES) {
-            final ByteBuffer inner = BufferUtil.copy(bb, nextAttribute);
-            final Attribute attribute = Attribute.create(inner);
+            final Attribute attribute = Attribute.create(bb, nextAttribute);
             this.attributes.add(attribute);
             nextAttribute += attribute.getLength();
         }
