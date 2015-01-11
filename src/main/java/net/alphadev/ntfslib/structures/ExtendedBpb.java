@@ -94,11 +94,15 @@ public class ExtendedBpb extends BiosParameterBlock {
         return volumeSerialNumber;
     }
 
-    public final int calculateBytes(int clusters) {
+    public final long calculateBytes(long clusters) {
         if (clusters < 0) {
             return (1 << -clusters);
         }
 
         return clusters * getSectorsPerCluster() * getBytesPerSector();
+    }
+
+    public final int calculateBytes(int clusters) {
+        return (int) calculateBytes(clusters);
     }
 }

@@ -31,7 +31,7 @@ public class MasterFileTable {
     private MasterFileTable(Volume volume, long baseOffset) {
         this.volume = volume;
         this.parameter = volume.getParameter();
-        this.baseOffset = parameter.calculateBytes((int) baseOffset);
+        this.baseOffset = parameter.calculateBytes(baseOffset);
     }
 
     public static MasterFileTable read(Volume volume) {
