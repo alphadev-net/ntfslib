@@ -103,6 +103,6 @@ public class ExtendedBpb extends BiosParameterBlock {
     }
 
     public final int calculateBytes(int clusters) {
-        return (int) calculateBytes(clusters);
+        return (int) calculateBytes((long) clusters);
     }
 }
