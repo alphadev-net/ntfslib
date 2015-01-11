@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2009-2013 Matthias Treydte <mt@waldheinz.de>
- *               2014 Jan Seeger <jan@alphadev.net>
+ *               2014-2015 Jan Seeger <jan@alphadev.net>
  *
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published
