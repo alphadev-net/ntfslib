@@ -32,7 +32,7 @@ public class IndexRoot extends Attribute {
     // Index Root
     private static final byte ATTRIBUTE_TYPE = 0x00;
     private static final byte COLLATION_RULE = 0x04;
-    private static final byte INDEX_ALLOCATION_ENTRY_SIZE = 0x08;
+    private static final byte ALLOCATED_INDEX_BLOCK_SIZE = 0x08;
     private static final byte CLUSTERS_PER_INDEX_RECORD = 0x0c;
 
     // Index Header
@@ -48,20 +48,24 @@ public class IndexRoot extends Attribute {
         bb = super.getPayloadBuffer();
     }
 
+    private int getAttributeType() {
+        return bb.getInt(ATTRIBUTE_TYPE);
+    }
+
+    public int getCollationRule() {
+        return bb.getInt(COLLATION_RULE);
+    }
+
+    public int getIndexEntryAllocationSize() {
+        return bb.get(ALLOCATED_INDEX_BLOCK_SIZE);
+    }
+
     public boolean isLargeIndex() {
         return bb.get(FLAGS) == 1;
     }
 
     public boolean isDirectory() {
         return AttributeType.FILE_NAME.equals(getAttributeType());
-    }
-
-    private AttributeType getAttributeType() {
-        return AttributeType.parse(bb.getInt(ATTRIBUTE_TYPE));
-    }
-
-    public int getCollationRule() {
-        return bb.getInt(COLLATION_RULE);
     }
 
     public byte getClustersPerIndex() {
@@ -76,12 +80,10 @@ public class IndexRoot extends Attribute {
         return bb.get(TOTAL_INDEX_ENTRIES);
     }
 
-    public int getIndexEntryAllocationSize() {
-        return bb.get(INDEX_ALLOCATION_ENTRY_SIZE);
-    }
-
     @Override
     public ByteBuffer getPayloadBuffer() {
-        return BufferUtil.copy(bb, HEADER_SIZE);
+        final int entryOffset = getFirstEntryOffset();
+        final int entryLength = getTotalEntrySize();
+        return BufferUtil.copyFor(bb, entryOffset, entryLength);
     }
 }
