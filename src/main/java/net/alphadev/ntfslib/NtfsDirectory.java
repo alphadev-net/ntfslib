@@ -20,6 +20,7 @@ import net.alphadev.ntfslib.api.Entry;
 import net.alphadev.ntfslib.structures.MasterFileTable;
 import net.alphadev.ntfslib.structures.attributes.AttributeType;
 import net.alphadev.ntfslib.structures.attributes.Filename;
+import net.alphadev.ntfslib.structures.attributes.index.IndexAllocation;
 import net.alphadev.ntfslib.structures.attributes.index.IndexEntry;
 import net.alphadev.ntfslib.structures.attributes.index.IndexRoot;
 import net.alphadev.ntfslib.structures.entries.FileRecord;
@@ -35,6 +36,7 @@ import java.nio.ByteBuffer;
 public class NtfsDirectory extends NtfsStructure implements Directory {
     private Map<String, Entry> entryCache = new HashMap<>();
     private IndexRoot indexRoot;
+    private IndexAllocation indexAllocation;
     private Filename filename;
     private Entry parentDir;
 
@@ -44,6 +46,8 @@ public class NtfsDirectory extends NtfsStructure implements Directory {
         this.parentDir = parentDir;
         filename = (Filename) rootDir.getAttribute(AttributeType.FILE_NAME);
         indexRoot = (IndexRoot) rootDir.getAttribute(AttributeType.INDEX_ROOT);
+        indexAllocation = (IndexAllocation) rootDir.getAttribute(AttributeType.INDEX_ALLOCATION);
+    }
 
         int offset = indexRoot.getFirstEntryOffset() + 0x10;
         IndexEntry entry;

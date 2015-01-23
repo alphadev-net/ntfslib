@@ -30,6 +30,7 @@
  */
 package net.alphadev.ntfslib.structures.attributes;
 
+import net.alphadev.ntfslib.structures.attributes.index.IndexAllocation;
 import net.alphadev.ntfslib.structures.attributes.index.IndexRoot;
 import net.alphadev.ntfslib.util.BufferUtil;
 
@@ -63,6 +64,8 @@ public class Attribute {
                 return new VolumeName(bb);
             case INDEX_ROOT:
                 return new IndexRoot(bb);
+            case INDEX_ALLOCATION:
+                return new IndexAllocation(bb);
             case FILE_NAME:
                 return new Filename(bb);
             default:
