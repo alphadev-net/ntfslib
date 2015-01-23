@@ -42,18 +42,14 @@ public class IndexEntry {
     }
 
     public boolean isLast() {
-        return getFlags().contains(EntryFlag.LAST);
+        return getFlags().contains(IndexEntryFlag.LAST);
     }
 
-    public EnumSet<EntryFlag> getFlags() {
-        return EnumSet.noneOf(EntryFlag.class);
+    public EnumSet<IndexEntryFlag> getFlags() {
+        return EnumSet.noneOf(IndexEntryFlag.class);
     }
 
     public short getSize() {
         return buffer.getShort(ENTRY_SIZE);
-    }
-
-    private enum EntryFlag {
-        LAST
     }
 }
