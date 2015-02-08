@@ -20,23 +20,14 @@ import net.alphadev.ntfslib.api.Entry;
 import net.alphadev.ntfslib.structures.MasterFileTable;
 import net.alphadev.ntfslib.structures.attributes.AttributeType;
 import net.alphadev.ntfslib.structures.attributes.Filename;
-import net.alphadev.ntfslib.structures.attributes.index.IndexAllocation;
-import net.alphadev.ntfslib.structures.attributes.index.IndexEntry;
-import net.alphadev.ntfslib.structures.attributes.index.IndexRoot;
 import net.alphadev.ntfslib.structures.entries.EntryCache;
 import net.alphadev.ntfslib.structures.entries.FileRecord;
-import net.alphadev.ntfslib.util.BufferUtil;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.nio.ByteBuffer;
+import net.alphadev.ntfslib.structures.entries.IndexIterator;
 
 /**
  * Created by jan on 13.12.14.
  */
 public class NtfsDirectory extends NtfsStructure implements Directory {
-    private IndexRoot indexRoot;
-    private IndexAllocation indexAllocation;
     private EntryCache entryCache = new EntryCache();
     private Entry parentDir;
     private FileRecord fileRecord;
@@ -45,19 +36,11 @@ public class NtfsDirectory extends NtfsStructure implements Directory {
         super(mft);
 
         this.parentDir = parentDir;
-        indexRoot = (IndexRoot) rootDir.getAttribute(AttributeType.INDEX_ROOT);
-        indexAllocation = (IndexAllocation) rootDir.getAttribute(AttributeType.INDEX_ALLOCATION);
         this.fileRecord = fileRecord;
     }
 
-        int offset = indexRoot.getFirstEntryOffset() + 0x10;
-        IndexEntry entry;
-        do {
-            entry = new IndexEntry(indexRoot, offset);
-            final NtfsEntry dirEntry = new NtfsEntry(mft, entry, parentDir);
-            entryCache.put(dirEntry.getName(), dirEntry);
-            offset += entry.getSize();
-        } while (entry != null && !entry.isLast());
+    private void populateEntryCache() {
+        entryCache.putAll(new IndexIterator(getMasterFileTable(), fileRecord, parentDir));
     }
 
     @Override
