@@ -37,16 +37,16 @@ public class NtfsDirectory extends NtfsStructure implements Directory {
     private Map<String, Entry> entryCache = new HashMap<>();
     private IndexRoot indexRoot;
     private IndexAllocation indexAllocation;
-    private Filename filename;
     private Entry parentDir;
+    private FileRecord fileRecord;
 
-    public NtfsDirectory(MasterFileTable mft, FileRecord rootDir, Entry parentDir) {
+    public NtfsDirectory(MasterFileTable mft, FileRecord fileRecord, Entry parentDir) {
         super(mft);
 
         this.parentDir = parentDir;
-        filename = (Filename) rootDir.getAttribute(AttributeType.FILE_NAME);
         indexRoot = (IndexRoot) rootDir.getAttribute(AttributeType.INDEX_ROOT);
         indexAllocation = (IndexAllocation) rootDir.getAttribute(AttributeType.INDEX_ALLOCATION);
+        this.fileRecord = fileRecord;
     }
 
         int offset = indexRoot.getFirstEntryOffset() + 0x10;
@@ -76,6 +76,9 @@ public class NtfsDirectory extends NtfsStructure implements Directory {
 
     @Override
     public String getName() {
+        final Filename filename =
+                (Filename) fileRecord.getAttribute(AttributeType.FILE_NAME);
+
         return filename.getFilename();
     }
 
