@@ -16,8 +16,8 @@
 package net.alphadev.ntfslib;
 
 import net.alphadev.ntfslib.api.BlockDevice;
-import net.alphadev.ntfslib.structures.BootSector;
-import net.alphadev.ntfslib.structures.ExtendedBpb;
+import net.alphadev.ntfslib.structures.boot.BootSector;
+import net.alphadev.ntfslib.structures.boot.ExtendedBpb;
 import net.alphadev.ntfslib.util.RamDisk;
 import org.junit.Assert;
 import org.junit.Before;

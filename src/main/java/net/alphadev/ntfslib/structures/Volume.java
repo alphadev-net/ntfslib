@@ -20,6 +20,8 @@ package net.alphadev.ntfslib.structures;
 
 import net.alphadev.ntfslib.api.BlockDevice;
 import net.alphadev.ntfslib.structures.attributes.VolumeName;
+import net.alphadev.ntfslib.structures.boot.BootSector;
+import net.alphadev.ntfslib.structures.boot.ExtendedBpb;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;

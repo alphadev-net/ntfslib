@@ -18,7 +18,7 @@ package net.alphadev.ntfslib;
 import net.alphadev.ntfslib.api.BlockDevice;
 import net.alphadev.ntfslib.api.Directory;
 import net.alphadev.ntfslib.api.Filesystem;
-import net.alphadev.ntfslib.structures.BootSector;
+import net.alphadev.ntfslib.structures.boot.BootSector;
 import net.alphadev.ntfslib.structures.MasterFileTable;
 import net.alphadev.ntfslib.structures.Volume;
 import net.alphadev.ntfslib.structures.attributes.AttributeType;

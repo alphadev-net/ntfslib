@@ -15,6 +15,7 @@
  */
 package net.alphadev.ntfslib.structures;
 
+import net.alphadev.ntfslib.structures.boot.ExtendedBpb;
 import net.alphadev.ntfslib.structures.entries.FileRecord;
 import net.alphadev.ntfslib.structures.entries.KnownMftEntries;
 

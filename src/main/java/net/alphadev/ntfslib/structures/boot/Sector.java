@@ -16,7 +16,7 @@
  * along with this library; If not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-package net.alphadev.ntfslib.structures;
+package net.alphadev.ntfslib.structures.boot;
 
 import net.alphadev.ntfslib.api.BlockDevice;
 
