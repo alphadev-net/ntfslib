@@ -23,6 +23,7 @@ import net.alphadev.ntfslib.structures.attributes.Filename;
 import net.alphadev.ntfslib.structures.attributes.index.IndexAllocation;
 import net.alphadev.ntfslib.structures.attributes.index.IndexEntry;
 import net.alphadev.ntfslib.structures.attributes.index.IndexRoot;
+import net.alphadev.ntfslib.structures.entries.EntryCache;
 import net.alphadev.ntfslib.structures.entries.FileRecord;
 import net.alphadev.ntfslib.util.BufferUtil;
 
@@ -34,9 +35,9 @@ import java.nio.ByteBuffer;
  * Created by jan on 13.12.14.
  */
 public class NtfsDirectory extends NtfsStructure implements Directory {
-    private Map<String, Entry> entryCache = new HashMap<>();
     private IndexRoot indexRoot;
     private IndexAllocation indexAllocation;
+    private EntryCache entryCache = new EntryCache();
     private Entry parentDir;
     private FileRecord fileRecord;
 
