@@ -34,7 +34,7 @@ public class BootSector extends Sector {
 
     private BootSector(BlockDevice device) throws IOException {
         super(device, 0, SIZE);
-        oemId = getString(OEM_ID_OFFSET, 8);
+        oemId = getString(OEM_ID_OFFSET, 8).trim();
         pbp = new ExtendedBpb(super.buffer);
     }
 
