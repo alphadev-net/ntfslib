@@ -10,9 +10,6 @@ import net.alphadev.ntfslib.structures.attributes.index.IndexRoot;
 
 import java.util.Iterator;
 
-/**
- * Created by jan on 08.02.15.
- */
 public class IndexIterator implements Iterable<Entry> {
     private final IndexRoot indexRoot;
     private final IndexAllocation indexAllocation;
