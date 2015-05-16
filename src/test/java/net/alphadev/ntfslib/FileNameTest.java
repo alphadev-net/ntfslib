@@ -29,19 +29,27 @@ import java.io.IOException;
 
 public class FileNameTest {
     private BlockDevice dev;
+    private Filesystem instance;
 
     @Before
     public void init() throws IOException {
         dev = RamDisk.readGzipped(getClass().getResourceAsStream("ntfs.img.gz"));
+        instance = new NtfsFilesystem(dev);
     }
 
     @Test
-    public void readFolderName() throws IOException {
-        Filesystem ntfs = new NtfsFilesystem(dev);
-        Directory root = ntfs.getRoot();
-        Entry folder = root.getEntry("Test");
+    public void checkRoot() throws IOException {
+        Directory root = instance.getRoot();
+
         Assert.assertNull(root.getParent());
         Assert.assertEquals(".", root.getName());
+    }
+
+    @Test
+    public void readFolderName() {
+        Directory root = instance.getRoot(); // 0x15C00 offset - 0x4000 baseoffset
+        Entry folder = root.getEntry("Test");
+
         Assert.assertEquals("Test", folder.getName());
         Assert.assertEquals(root, folder.getParent());
     }
