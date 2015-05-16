@@ -15,7 +15,9 @@
  */
 package net.alphadev.ntfslib.api;
 
-public interface Filesystem {
+import java.io.Closeable;
+
+public interface Filesystem extends Closeable {
     String getVolumeName();
 
     Directory getRoot();

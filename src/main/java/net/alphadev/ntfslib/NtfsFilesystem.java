@@ -70,4 +70,9 @@ public class NtfsFilesystem implements Filesystem {
 
         return fsRoot;
     }
+
+    @Override
+    public void close() throws IOException {
+        volume.close();
+    }
 }

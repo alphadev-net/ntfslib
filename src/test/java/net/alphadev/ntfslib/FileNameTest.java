@@ -20,10 +20,7 @@ import net.alphadev.ntfslib.api.Directory;
 import net.alphadev.ntfslib.api.Entry;
 import net.alphadev.ntfslib.api.Filesystem;
 import net.alphadev.ntfslib.util.RamDisk;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.Ignore;
+import org.junit.*;
 
 import java.io.IOException;
 
@@ -35,6 +32,11 @@ public class FileNameTest {
     public void init() throws IOException {
         dev = RamDisk.readGzipped(getClass().getResourceAsStream("ntfs.img.gz"));
         instance = new NtfsFilesystem(dev);
+    }
+
+    @After
+    public void teardown() throws IOException {
+        instance.close();
     }
 
     @Test
